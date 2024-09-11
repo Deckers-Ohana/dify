@@ -1,7 +1,5 @@
 import os
 
-import requests
-
 
 class EnterpriseRequest:
     base_url = os.environ.get("ENTERPRISE_API_URL", "ENTERPRISE_API_URL")
