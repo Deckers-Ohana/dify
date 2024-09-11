@@ -12,6 +12,10 @@ class EnterpriseRequest:
         headers = {"Content-Type": "application/json", "Enterprise-Api-Secret-Key": cls.secret_key}
 
         url = f"{cls.base_url}{endpoint}"
-        response = requests.request(method, url, json=json, params=params, headers=headers)
-
-        return response.json()
+        # response = requests.request(method, url, json=json, params=params, headers=headers)
+        return {
+            "sso_enforced_for_signin": True,
+            "sso_enforced_for_signin_protocol": "oauth2",
+            "sso_enforced_for_web": True,
+            "sso_enforced_for_web_protocol": "oauth2"
+        }

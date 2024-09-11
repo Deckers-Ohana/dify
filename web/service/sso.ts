@@ -1,4 +1,5 @@
 import { get } from './base'
+import { API_PREFIX } from '@/config'
 
 export const getUserSAMLSSOUrl = () => {
   return get<{ url: string }>('/enterprise/sso/saml/login')
@@ -9,5 +10,5 @@ export const getUserOIDCSSOUrl = () => {
 }
 
 export const getUserOAuth2SSOUrl = () => {
-  return get<{ url: string; state: string }>('/enterprise/sso/oauth2/login')
+  return `${API_PREFIX}/oauth/login/divzen`
 }

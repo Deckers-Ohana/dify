@@ -33,18 +33,20 @@ def get_oauth_providers():
             google_oauth = GoogleOAuth(
                 client_id=dify_config.GOOGLE_CLIENT_ID,
                 client_secret=dify_config.GOOGLE_CLIENT_SECRET,
-                redirect_uri=dify_config.CONSOLE_API_URL + "/console/api/oauth/authorize/google",
+                redirect_uri=dify_config.CONSOLE_API_URL + "/console/api/oauth/authorize/divzen",
             )
 
-        OAUTH_PROVIDERS = {"github": github_oauth, "google": google_oauth}
+        OAUTH_PROVIDERS = {"github": github_oauth, "divzen": google_oauth}
         return OAUTH_PROVIDERS
 
 
 class OAuthLogin(Resource):
     def get(self, provider: str):
+        print(provider)
         OAUTH_PROVIDERS = get_oauth_providers()
         with current_app.app_context():
             oauth_provider = OAUTH_PROVIDERS.get(provider)
+            print(oauth_provider)
             print(vars(oauth_provider))
         if not oauth_provider:
             return {"error": "Invalid provider"}, 400

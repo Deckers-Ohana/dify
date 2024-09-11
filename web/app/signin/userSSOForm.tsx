@@ -56,12 +56,7 @@ const UserSSOForm: FC<UserSSOFormProps> = ({
       })
     }
     else if (protocol === 'oauth2') {
-      getUserOAuth2SSOUrl().then((res) => {
-        document.cookie = `user-oauth2-state=${res.state}`
-        router.push(res.url)
-      }).finally(() => {
-        setIsLoading(false)
-      })
+      window.location.href = getUserOAuth2SSOUrl()
     }
     else {
       Toast.notify({

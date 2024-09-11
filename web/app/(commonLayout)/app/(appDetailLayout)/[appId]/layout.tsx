@@ -116,7 +116,7 @@ const AppDetailLayout: FC<IAppDetailLayoutProps> = (props) => {
         router.replace(`/app/${appId}/configuration`)
       }
       else {
-        setAppDetail({ ...res, enable_sso: false })
+        setAppDetail({ ...res, enable_sso: true })
         setNavigation(getNavigations(appId, isCurrentWorkspaceEditor, res.mode))
         if (systemFeatures.enable_web_sso_switch_component) {
           fetchAppSSO({ appId }).then((ssoRes) => {

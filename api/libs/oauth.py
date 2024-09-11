@@ -1,6 +1,7 @@
 import urllib.parse
 from dataclasses import dataclass
 
+import jwt
 import requests
 
 
@@ -35,10 +36,10 @@ class OAuth:
 
 
 class GitHubOAuth(OAuth):
-    _AUTH_URL = "https://github.com/login/oauth/authorize"
-    _TOKEN_URL = "https://github.com/login/oauth/access_token"
-    _USER_INFO_URL = "https://api.github.com/user"
-    _EMAIL_INFO_URL = "https://api.github.com/user/emails"
+    _AUTH_URL = 'https://github.com/login/oauth/authorize'
+    _TOKEN_URL = 'https://github.com/login/oauth/access_token'
+    _USER_INFO_URL = 'https://api.github.com/user'
+    _EMAIL_INFO_URL = 'https://api.github.com/user/emails'
 
     def get_authorization_url(self):
         params = {
@@ -86,9 +87,9 @@ class GitHubOAuth(OAuth):
 
 
 class GoogleOAuth(OAuth):
-    _AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
-    _TOKEN_URL = "https://oauth2.googleapis.com/token"
-    _USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
+    _AUTH_URL = 'https://divzen.uat.turtle.deckers.com/oauth2/authorize'
+    _TOKEN_URL = 'https://divzen.uat.turtle.deckers.com/oauth2/token'
+    _USER_INFO_URL = 'https://divzen.uat.turtle.deckers.com/oauth2/userinfo'
 
     def get_authorization_url(self):
         params = {
@@ -119,10 +120,22 @@ class GoogleOAuth(OAuth):
         return access_token
 
     def get_raw_user_info(self, token: str):
-        headers = {"Authorization": f"Bearer {token}"}
-        response = requests.get(self._USER_INFO_URL, headers=headers)
-        response.raise_for_status()
-        return response.json()
+        # headers = {'Authorization': f"Bearer {token}"}
+        # response = requests.get(self._USER_INFO_URL, headers=headers)
+        # response.raise_for_status()
+        # return response.json()
+        payload = jwt.decode(token,verify=False,options={"verify_signature":False})
+        print(payload)
+        name = payload["sub"]
+        if name.find("@"):
+            email = payload["sub"]
+        else:
+            email = name+"@deckers.com"
+        return {
+            "sub":name,
+            "email":email,
+            "id":payload["id"]
+        }
 
     def _transform_user_info(self, raw_info: dict) -> OAuthUserInfo:
-        return OAuthUserInfo(id=str(raw_info["sub"]), name=None, email=raw_info["email"])
+        return OAuthUserInfo(id=str(raw_info["id"]), name=str(raw_info["sub"]), email=raw_info["email"])
