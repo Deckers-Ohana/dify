@@ -378,12 +378,12 @@ class OAuthConfig(BaseSettings):
 
     GOOGLE_CLIENT_ID: Optional[str] = Field(
         description='Google client id for OAuth',
-        default='587665418321989',
+        default='',
     )
 
     GOOGLE_CLIENT_SECRET: Optional[str] = Field(
         description='Google client secret key for OAuth',
-        default='TvYfWhBsEJkJEYqkRActwygAuayMVjAW',
+        default='',
     )
 
 

@@ -8,7 +8,9 @@ class EnterpriseRequest:
     @classmethod
     def send_request(cls, method, endpoint, json=None, params=None):
         headers = {"Content-Type": "application/json", "Enterprise-Api-Secret-Key": cls.secret_key}
-
+        if 'app-sso-setting' in endpoint:
+            return {
+                "enabled": True}
         url = f"{cls.base_url}{endpoint}"
         # response = requests.request(method, url, json=json, params=params, headers=headers)
         return {

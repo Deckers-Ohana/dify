@@ -70,7 +70,7 @@ def decode_jwt_token():
 
 
 def _validate_web_sso_token(decoded, system_features, app_code):
-    app_web_sso_enabled = False
+    app_web_sso_enabled = True
 
     # Check if SSO is enforced for web, and if the token source is not SSO, raise an error and redirect to SSO login
     if system_features.sso_enforced_for_web:
