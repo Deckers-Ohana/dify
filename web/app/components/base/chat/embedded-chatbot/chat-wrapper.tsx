@@ -6,6 +6,7 @@ import type {
   OnSend,
 } from '../types'
 import { useChat } from '../chat/hooks'
+import { getLastAnswer } from '../utils'
 import { useEmbeddedChatbotContext } from './context'
 import ConfigPanel from './config-panel'
 import { isDify } from './utils'
@@ -41,6 +42,10 @@ const ChatWrapper = () => {
 
     return {
       ...config,
+      file_upload: {
+        ...(config as any).file_upload,
+        fileUploadConfig: (config as any).system_parameters,
+      },
       supportFeedback: true,
       opening_statement: currentConversationId ? currentConversationItem?.introduction : (config as any).opening_statement,
     } as ChatConfig
@@ -57,7 +62,7 @@ const ChatWrapper = () => {
     appConfig,
     {
       inputs: (currentConversationId ? currentConversationItem?.inputs : newConversationInputs) as any,
-      promptVariables: inputsForms,
+      inputsForm: inputsForms,
     },
     appPrevChatList,
     taskId => stopChatMessageResponding('', taskId, isInstalledApp, appId),
@@ -69,21 +74,13 @@ const ChatWrapper = () => {
   }, [])
 
   const doSend: OnSend = useCallback((message, files, last_answer) => {
-    const lastAnswer = chatListRef.current.at(-1)
-
     const data: any = {
       query: message,
+      files,
       inputs: currentConversationId ? currentConversationItem?.inputs : newConversationInputs,
       conversation_id: currentConversationId,
-      parent_message_id: last_answer?.id || (lastAnswer
-        ? lastAnswer.isOpeningStatement
-          ? null
-          : lastAnswer.id
-        : null),
+      parent_message_id: last_answer?.id || getLastAnswer(chatListRef.current)?.id || null,
     }
-
-    if (appConfig?.file_upload?.image.enabled && files?.length)
-      data.files = files
 
     handleSend(
       getUrl('chat-messages', isInstalledApp, appId || ''),
@@ -113,13 +110,13 @@ const ChatWrapper = () => {
 
     const prevMessages = chatList.slice(0, index)
     const question = prevMessages.pop()
-    const lastAnswer = prevMessages.at(-1)
+    const lastAnswer = getLastAnswer(prevMessages)
 
     if (!question)
       return
 
     handleUpdateChatList(prevMessages)
-    doSend(question.content, question.message_files, (!lastAnswer || lastAnswer.isOpeningStatement) ? undefined : lastAnswer)
+    doSend(question.content, question.message_files, lastAnswer)
   }, [chatList, handleUpdateChatList, doSend])
 
   const chatNode = useMemo(() => {
@@ -164,6 +161,8 @@ const ChatWrapper = () => {
       chatFooterClassName='pb-4'
       chatFooterInnerClassName={cn('mx-auto w-full max-w-full tablet:px-4', isMobile && 'px-4')}
       onSend={doSend}
+      inputs={currentConversationId ? currentConversationItem?.inputs as any : newConversationInputs}
+      inputsForm={inputsForms}
       onRegenerate={doRegenerate}
       onStopResponding={handleStop}
       chatNode={chatNode}

@@ -1,3 +1,4 @@
+from collections.abc import Mapping, Sequence
 from enum import Enum
 from typing import Any, Optional
 
@@ -119,6 +120,7 @@ class MessageEndStreamResponse(StreamResponse):
     event: StreamEvent = StreamEvent.MESSAGE_END
     id: str
     metadata: dict = {}
+    files: Optional[Sequence[Mapping[str, Any]]] = None
 
 
 class MessageFileStreamResponse(StreamResponse):
@@ -211,7 +213,8 @@ class WorkflowFinishStreamResponse(StreamResponse):
         created_by: Optional[dict] = None
         created_at: int
         finished_at: int
-        files: Optional[list[dict]] = []
+        exceptions_count: Optional[int] = 0
+        files: Optional[Sequence[Mapping[str, Any]]] = []
 
     event: StreamEvent = StreamEvent.WORKFLOW_FINISHED
     workflow_run_id: str
@@ -242,6 +245,7 @@ class NodeStartStreamResponse(StreamResponse):
         parent_parallel_id: Optional[str] = None
         parent_parallel_start_node_id: Optional[str] = None
         iteration_id: Optional[str] = None
+        parallel_run_id: Optional[str] = None
 
     event: StreamEvent = StreamEvent.NODE_STARTED
     workflow_run_id: str
@@ -296,7 +300,7 @@ class NodeFinishStreamResponse(StreamResponse):
         execution_metadata: Optional[dict] = None
         created_at: int
         finished_at: int
-        files: Optional[list[dict]] = []
+        files: Optional[Sequence[Mapping[str, Any]]] = []
         parallel_id: Optional[str] = None
         parallel_start_node_id: Optional[str] = None
         parent_parallel_id: Optional[str] = None
@@ -430,6 +434,8 @@ class IterationNodeNextStreamResponse(StreamResponse):
         extras: dict = {}
         parallel_id: Optional[str] = None
         parallel_start_node_id: Optional[str] = None
+        parallel_mode_run_id: Optional[str] = None
+        duration: Optional[float] = None
 
     event: StreamEvent = StreamEvent.ITERATION_NEXT
     workflow_run_id: str

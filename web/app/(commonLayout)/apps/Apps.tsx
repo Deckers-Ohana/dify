@@ -21,7 +21,7 @@ import { NEED_REFRESH_APP_LIST_KEY } from '@/config'
 import { CheckModal } from '@/hooks/use-pay'
 import TabSliderNew from '@/app/components/base/tab-slider-new'
 import { useTabSearchParams } from '@/hooks/use-tab-searchparams'
-import SearchInput from '@/app/components/base/search-input'
+import Input from '@/app/components/base/input'
 import { useStore as useTagStore } from '@/app/components/base/tag-management/store'
 import TagManagementModal from '@/app/components/base/tag-management'
 import TagFilter from '@/app/components/base/tag-management/filter'
@@ -87,15 +87,15 @@ const Apps = () => {
       localStorage.removeItem(NEED_REFRESH_APP_LIST_KEY)
       mutate()
     }
-  }, [])
+  }, [mutate, t])
 
   useEffect(() => {
     if (isCurrentWorkspaceDatasetOperator)
       return router.replace('/datasets')
-  }, [isCurrentWorkspaceDatasetOperator])
+  }, [router, isCurrentWorkspaceDatasetOperator])
 
-  const hasMore = data?.at(-1)?.has_more ?? true
   useEffect(() => {
+    const hasMore = data?.at(-1)?.has_more ?? true
     let observer: IntersectionObserver | undefined
     if (anchorRef.current) {
       observer = new IntersectionObserver((entries) => {
@@ -105,7 +105,7 @@ const Apps = () => {
       observer.observe(anchorRef.current)
     }
     return () => observer?.disconnect()
-  }, [isLoading, setSize, anchorRef, mutate, hasMore])
+  }, [isLoading, setSize, anchorRef, mutate, data])
 
   const { run: handleSearch } = useDebounceFn(() => {
     setSearchKeywords(keywords)
@@ -125,7 +125,7 @@ const Apps = () => {
 
   return (
     <>
-      <div className='sticky top-0 flex justify-between items-center pt-4 px-12 pb-2 leading-[56px] bg-gray-100 z-10 flex-wrap gap-y-2'>
+      <div className='sticky top-0 flex justify-between items-center pt-4 px-12 pb-2 leading-[56px] bg-background-body z-10 flex-wrap gap-y-2'>
         <TabSliderNew
           value={activeTab}
           onChange={setActiveTab}
@@ -133,17 +133,30 @@ const Apps = () => {
         />
         <div className='flex items-center gap-2'>
           <TagFilter type='app' value={tagFilterValue} onChange={handleTagsChange} />
-          <SearchInput className='w-[200px]' value={keywords} onChange={handleKeywordsChange} />
+          <Input
+            showLeftIcon
+            showClearIcon
+            wrapperClassName='w-[200px]'
+            value={keywords}
+            onChange={e => handleKeywordsChange(e.target.value)}
+            onClear={() => handleKeywordsChange('')}
+          />
         </div>
       </div>
-      <nav className='grid content-start grid-cols-1 gap-4 px-12 pt-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grow shrink-0'>
-        {isCurrentWorkspaceEditor
-          && <NewAppCard onSuccess={mutate} />}
-        {data?.map(({ data: apps }) => apps.map(app => (
-          <AppCard key={app.id} app={app} onRefresh={mutate} />
-        )))}
-        <CheckModal />
-      </nav>
+      {(data && data[0].total > 0)
+        ? <div className='grid content-start grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5 2k:grid-cols-6 gap-4 px-12 pt-2 grow relative'>
+          {isCurrentWorkspaceEditor
+            && <NewAppCard onSuccess={mutate} />}
+          {data.map(({ data: apps }) => apps.map(app => (
+            <AppCard key={app.id} app={app} onRefresh={mutate} />
+          )))}
+        </div>
+        : <div className='grid content-start grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5 2k:grid-cols-6 gap-4 px-12 pt-2 grow relative overflow-hidden'>
+          {isCurrentWorkspaceEditor
+            && <NewAppCard className='z-10' onSuccess={mutate} />}
+          <NoAppsFound />
+        </div>}
+      <CheckModal />
       <div ref={anchorRef} className='h-0'> </div>
       {showTagManagementModal && (
         <TagManagementModal type='app' show={showTagManagementModal} />
@@ -153,3 +166,21 @@ const Apps = () => {
 }
 
 export default Apps
+
+function NoAppsFound() {
+  const { t } = useTranslation()
+  function renderDefaultCard() {
+    const defaultCards = Array.from({ length: 36 }, (_, index) => (
+      <div key={index} className='h-[160px] inline-flex rounded-xl bg-background-default-lighter'></div>
+    ))
+    return defaultCards
+  }
+  return (
+    <>
+      {renderDefaultCard()}
+      <div className='absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gradient-to-t from-background-body to-transparent'>
+        <span className='system-md-medium text-text-tertiary'>{t('app.newApp.noAppsFound')}</span>
+      </div>
+    </>
+  )
+}

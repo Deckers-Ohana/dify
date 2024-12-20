@@ -1,5 +1,6 @@
 import urllib.parse
 from dataclasses import dataclass
+from typing import Optional
 
 import jwt
 import requests
@@ -41,12 +42,14 @@ class GitHubOAuth(OAuth):
     _USER_INFO_URL = 'https://api.github.com/user'
     _EMAIL_INFO_URL = 'https://api.github.com/user/emails'
 
-    def get_authorization_url(self):
+    def get_authorization_url(self, invite_token: Optional[str] = None):
         params = {
             "client_id": self.client_id,
             "redirect_uri": self.redirect_uri,
             "scope": "user:email",  # Request only basic user information
         }
+        if invite_token:
+            params["state"] = invite_token
         return f"{self._AUTH_URL}?{urllib.parse.urlencode(params)}"
 
     def get_access_token(self, code: str):
@@ -91,13 +94,15 @@ class GoogleOAuth(OAuth):
     _TOKEN_URL = 'https://divzen.uat.turtle.deckers.com/oauth2/token'
     _USER_INFO_URL = 'https://divzen.uat.turtle.deckers.com/oauth2/userinfo'
 
-    def get_authorization_url(self):
+    def get_authorization_url(self, invite_token: Optional[str] = None):
         params = {
             "client_id": self.client_id,
             "response_type": "code",
             "redirect_uri": self.redirect_uri,
             "scope": "openid email",
         }
+        if invite_token:
+            params["state"] = invite_token
         return f"{self._AUTH_URL}?{urllib.parse.urlencode(params)}"
 
     def get_access_token(self, code: str):
