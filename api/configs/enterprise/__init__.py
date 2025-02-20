@@ -11,10 +11,10 @@ class EnterpriseFeatureConfig(BaseSettings):
     ENTERPRISE_ENABLED: bool = Field(
         description="Enable or disable enterprise-level features."
         "Before using, please contact business@dify.ai by email to inquire about licensing matters.",
-        default=False,
+        default=True,
     )
 
     CAN_REPLACE_LOGO: bool = Field(
         description="Allow customization of the enterprise logo.",
-        default=False,
+        default=True,
     )

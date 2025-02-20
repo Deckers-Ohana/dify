@@ -24,6 +24,7 @@ export type SystemFeatures = {
   sso_enforced_for_web: boolean
   sso_enforced_for_web_protocol: SSOProtocol | ''
   enable_web_sso_switch_component: boolean
+  enable_marketplace: boolean
   enable_email_code_login: boolean
   enable_email_password_login: boolean
   enable_social_oauth_login: boolean
@@ -35,10 +36,11 @@ export type SystemFeatures = {
 
 export const defaultSystemFeatures: SystemFeatures = {
   sso_enforced_for_signin: true,
-  sso_enforced_for_signin_protocol: 'oauth2',
+  sso_enforced_for_signin_protocol: SSOProtocol.OAuth2,
   sso_enforced_for_web: true,
-  sso_enforced_for_web_protocol: 'oauth2',
+  sso_enforced_for_web_protocol: SSOProtocol.OAuth2,
   enable_web_sso_switch_component: true,
+  enable_marketplace: true,
   enable_email_code_login: true,
   enable_email_password_login: true,
   enable_social_oauth_login: true,
