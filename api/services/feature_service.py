@@ -32,7 +32,7 @@ class LicenseStatus(StrEnum):
 
 
 class LicenseModel(BaseModel):
-    status: LicenseStatus = LicenseStatus.NONE
+    status: LicenseStatus = LicenseStatus.ACTIVE
     expired_at: str = ""
 
 
@@ -53,19 +53,19 @@ class FeatureModel(BaseModel):
 
 
 class SystemFeatureModel(BaseModel):
-    sso_enforced_for_signin: bool = False
-    sso_enforced_for_signin_protocol: str = ""
-    sso_enforced_for_web: bool = False
-    sso_enforced_for_web_protocol: str = ""
-    enable_web_sso_switch_component: bool = False
+    sso_enforced_for_signin: bool = True
+    sso_enforced_for_signin_protocol: str = "oidc"
+    sso_enforced_for_web: bool = True
+    sso_enforced_for_web_protocol: str = "oidc"
+    enable_web_sso_switch_component: bool = True
     enable_marketplace: bool = True
     max_plugin_package_size: int = dify_config.PLUGIN_MAX_PACKAGE_SIZE
-    enable_email_code_login: bool = False
+    enable_email_code_login: bool = True
     enable_email_password_login: bool = True
-    enable_social_oauth_login: bool = False
-    is_allow_register: bool = False
-    is_allow_create_workspace: bool = False
-    is_email_setup: bool = False
+    enable_social_oauth_login: bool = True
+    is_allow_register: bool = True
+    is_allow_create_workspace: bool = True
+    is_email_setup: bool = True
     license: LicenseModel = LicenseModel()
 
 

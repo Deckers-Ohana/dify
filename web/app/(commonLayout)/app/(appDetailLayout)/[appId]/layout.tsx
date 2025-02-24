@@ -21,7 +21,7 @@ import cn from '@/utils/classnames'
 import { useStore } from '@/app/components/app/store'
 import AppSideBar from '@/app/components/app-sidebar'
 import type { NavIcon } from '@/app/components/app-sidebar/navLink'
-import { fetchAppDetail, fetchAppSSO } from '@/service/apps'
+import { fetchAppDetail } from '@/service/apps'
 import AppContext, { useAppContext } from '@/context/app-context'
 import Loading from '@/app/components/base/loading'
 import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
@@ -141,11 +141,11 @@ const AppDetailLayout: FC<IAppDetailLayoutProps> = (props) => {
     else {
       setAppDetail({ ...res, enable_sso: true })
       setNavigation(getNavigations(appId, isCurrentWorkspaceEditor, res.mode))
-      if (systemFeatures.enable_web_sso_switch_component && canIEditApp) {
-        fetchAppSSO({ appId }).then((ssoRes) => {
-          setAppDetail({ ...res, enable_sso: ssoRes.enabled })
-        })
-      }
+      // if (systemFeatures.enable_web_sso_switch_component && canIEditApp) {
+      //   fetchAppSSO({ appId }).then((ssoRes) => {
+      //     setAppDetail({ ...res, enable_sso: ssoRes.enabled })
+      //   })
+      // }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appDetailRes, appId, getNavigations, isCurrentWorkspaceEditor, isLoadingAppDetail, isLoadingCurrentWorkspace, router, setAppDetail, systemFeatures.enable_web_sso_switch_component])

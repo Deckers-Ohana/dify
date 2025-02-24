@@ -541,6 +541,16 @@ class AuthConfig(BaseSettings):
         default=None,
     )
 
+    DIVZEN_CLIENT_ID: Optional[str] = Field(
+        description="divZen OAuth client ID",
+        default=None,
+    )
+
+    DIVZEN_CLIENT_SECRET: Optional[str] = Field(
+        description="divZen OAuth client secret",
+        default=None,
+    )
+
     ACCESS_TOKEN_EXPIRE_MINUTES: PositiveInt = Field(
         description="Expiration time for access tokens in minutes",
         default=60,
@@ -830,11 +840,11 @@ class LoginConfig(BaseSettings):
     )
     ALLOW_REGISTER: bool = Field(
         description="whether to enable register",
-        default=False,
+        default=True,
     )
     ALLOW_CREATE_WORKSPACE: bool = Field(
         description="whether to enable create workspace",
-        default=False,
+        default=True,
     )
 
 

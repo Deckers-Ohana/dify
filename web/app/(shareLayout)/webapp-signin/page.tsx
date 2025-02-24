@@ -57,6 +57,7 @@ const WebSSOForm: FC = () => {
       }
       case 'oidc': {
         const oidcRes = await fetchWebOIDCSSOUrl(appCode, redirectUrl)
+        document.cookie = `web-oidc-state=${oidcRes.state}`
         router.push(oidcRes.url)
         break
       }

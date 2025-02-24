@@ -1,8 +1,10 @@
+import secrets
+
 from flask import current_app, redirect
 from flask_restful import Resource, reqparse
 
 from controllers.console import api
-from controllers.console.setup import setup_required
+from controllers.console.wraps import setup_required
 from services.enterprise.enterprise_sso_service import EnterpriseSSOService
 
 
@@ -29,7 +31,9 @@ class EnterpriseSSOSamlAcs(Resource):
 class EnterpriseSSOOidcLogin(Resource):
     @setup_required
     def get(self):
-        return EnterpriseSSOService.get_sso_oidc_login()
+        # 生成安全的随机 state 参数
+        state = secrets.token_urlsafe(16)  # 生成 16字节 的随机字符串（Base64编码）
+        return EnterpriseSSOService.get_sso_oidc_login(state)
 
 
 class EnterpriseSSOOidcCallback(Resource):
@@ -38,11 +42,13 @@ class EnterpriseSSOOidcCallback(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument("state", type=str, required=True, location="args")
         parser.add_argument("code", type=str, required=True, location="args")
-        parser.add_argument("oidc-state", type=str, required=True, location="cookies")
+        parser.add_argument("user-oidc-state", type=str, required=True, location="cookies")
         args = parser.parse_args()
         try:
             token = EnterpriseSSOService.get_sso_oidc_callback(args)
-            return redirect(f"{current_app.config.get('CONSOLE_WEB_URL')}/signin?console_token={token}")
+            print(token)
+            return redirect(
+                f"{current_app.config.get('CONSOLE_WEB_URL')}/signin?access_token={token.get("access_token")}&refresh_token={token.get("refresh_token")}")
         except Exception as e:
             return redirect(f"{current_app.config.get('CONSOLE_WEB_URL')}/signin?message={str(e)}")
 

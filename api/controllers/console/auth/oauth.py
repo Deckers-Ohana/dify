@@ -43,8 +43,16 @@ def get_oauth_providers():
                 client_secret=dify_config.GOOGLE_CLIENT_SECRET,
                 redirect_uri=dify_config.CONSOLE_API_URL + "/console/api/oauth/authorize/divzen",
             )
+        if not dify_config.DIVZEN_CLIENT_ID or not dify_config.DIVZEN_CLIENT_SECRET:
+            divZen_oauth = None
+        else:
+            divZen_oauth = GoogleOAuth(
+                client_id=dify_config.DIVZEN_CLIENT_ID,
+                client_secret=dify_config.DIVZEN_CLIENT_SECRET,
+                redirect_uri=dify_config.CONSOLE_API_URL + "/console/api/oauth/authorize/divzen",
+            )
 
-        OAUTH_PROVIDERS = {"github": github_oauth, "divzen": google_oauth}
+        OAUTH_PROVIDERS = {"github": github_oauth, "divzen": divZen_oauth, "google": google_oauth}
         return OAUTH_PROVIDERS
 
 
