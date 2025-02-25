@@ -20,8 +20,8 @@ COPY pnpm-lock.yaml .
 
 # if you located in China, you can use taobao registry to speed up
 # RUN pnpm install --frozen-lockfile --registry https://registry.npmmirror.com/
-
-RUN pnpm install --frozen-lockfile
+RUN apk add --no-cache --no-check-certificate cairo-dev g++ giflib-dev jpeg-dev make pango-dev python3 \
+    && pnpm install --frozen-lockfile
 
 # build resources
 FROM base AS builder
