@@ -61,6 +61,9 @@ class EnterpriseSSOService:
         )
         token = divzen_oauth.get_access_token(code=code_from_query)
         response = divzen_oauth.get_user_info(token=token.get("access_token"))
+        if response is None or response.email is None or "gpt user group" not in response.group:
+            logger.exception(response)
+            raise Exception("User not authorized")
         if response is None or response.email is None:
             logger.exception(response)
             raise Exception("OIDC response is invalid")

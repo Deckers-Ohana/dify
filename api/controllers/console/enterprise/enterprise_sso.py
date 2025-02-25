@@ -61,7 +61,6 @@ class EnterpriseSSOOidcCallback(Resource):
         args = parser.parse_args()
         try:
             token = EnterpriseSSOService.get_sso_oidc_callback(args)
-            print(token)
             return redirect(
                 f"{current_app.config.get('CONSOLE_WEB_URL')}/signin?access_token={token.get('access_token')}&refresh_token={token.get('refresh_token')}"
             )
