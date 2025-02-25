@@ -28,7 +28,7 @@ RUN apt-get -o Acquire::Check-Date=false update \
 # Install Python dependencies
 COPY pyproject.toml  ./
 #COPY ca/cacert.pem ./
-RUN poetry config certificates.pypi-tuna.cert false && poetry install  --sync --no-cache --no-root
+RUN poetry install  --sync --no-cache --no-root
 
 # production stage
 FROM base AS production

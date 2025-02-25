@@ -1,6 +1,6 @@
 import secrets
 
-from flask import current_app, redirect
+from flask import current_app, make_response, redirect
 from flask_restful import Resource, reqparse
 
 from controllers.console import api
@@ -33,7 +33,22 @@ class EnterpriseSSOOidcLogin(Resource):
     def get(self):
         # 生成安全的随机 state 参数
         state = secrets.token_urlsafe(16)  # 生成 16字节 的随机字符串（Base64编码）
-        return EnterpriseSSOService.get_sso_oidc_login(state)
+        data = EnterpriseSSOService.get_sso_oidc_login(state)
+        # 创建响应对象（两种方式任选）
+        resp = make_response(data)  # 方式1：自动转换JSON
+        # 或 resp = Response(json.dumps(auth_data), mimetype='application/json')  # 方式2
+        # 设置企业级安全 Cookie
+        resp.set_cookie(
+            key="user-oidc-state",
+            value=state,  # 实际应使用加密后的值
+            max_age=86400,  # 24小时有效期
+            # domain= '127.0.0.1',
+            secure=True,  # 强制 HTTPS
+            httponly=True,  # 禁止 JS 访问
+            samesite="Lax",  # 同站策略
+            path="/",  # 限定 API 路径
+        )
+        return resp
 
 
 class EnterpriseSSOOidcCallback(Resource):
@@ -48,7 +63,8 @@ class EnterpriseSSOOidcCallback(Resource):
             token = EnterpriseSSOService.get_sso_oidc_callback(args)
             print(token)
             return redirect(
-                f"{current_app.config.get('CONSOLE_WEB_URL')}/signin?access_token={token.get("access_token")}&refresh_token={token.get("refresh_token")}")
+                f"{current_app.config.get('CONSOLE_WEB_URL')}/signin?access_token={token.get('access_token')}&refresh_token={token.get('refresh_token')}"
+            )
         except Exception as e:
             return redirect(f"{current_app.config.get('CONSOLE_WEB_URL')}/signin?message={str(e)}")
 

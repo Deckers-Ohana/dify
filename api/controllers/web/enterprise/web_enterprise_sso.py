@@ -1,6 +1,6 @@
 import logging
 
-from flask import current_app, redirect
+from flask import current_app, make_response, redirect
 from flask_restful import Resource, reqparse
 
 from configs import dify_config
@@ -22,8 +22,22 @@ class EnterpriseSSOOidcLogin(Resource):
             client_secret=dify_config.DIVZEN_CLIENT_SECRET,
             redirect_uri=dify_config.CONSOLE_API_URL + "/api/enterprise/sso/oidc/callback",
         )
-        auth_url = divzen_oauth.get_authorization_url(invite_token=args['app_code'])
-        return {"url": auth_url, "state": args["app_code"]}
+        auth_url = divzen_oauth.get_authorization_url(invite_token=args["app_code"])
+        data = {"url": auth_url, "state": args["app_code"]}
+        # 创建响应对象（两种方式任选）
+        resp = make_response(data)  # 方式1：自动转换JSON
+        # 或 resp = Response(json.dumps(auth_data), mimetype='application/json')  # 方式2
+        # 设置企业级安全 Cookie
+        resp.set_cookie(
+            key="web-oidc-state",
+            value=args["app_code"],  # 实际应使用加密后的值
+            max_age=86400,  # 24小时有效期
+            secure=True,  # 强制 HTTPS
+            httponly=True,  # 禁止 JS 访问
+            samesite="Lax",  # 同站策略
+            path="/",  # 限定 API 路径
+        )
+        return resp
 
 
 class EnterpriseSSOOidcCallback(Resource):
@@ -46,7 +60,7 @@ class EnterpriseSSOOidcCallback(Resource):
             )
             token = divzen_oauth.get_access_token(code=code_from_query)
             response = divzen_oauth.get_user_info(token=token.get("access_token"))
-            if response is None or response.email is None or 'gpt user group' not in response.group:
+            if response is None or response.email is None or "gpt user group" not in response.group:
                 logger.exception(response)
                 raise Exception("User not authorized")
             token = EnterpriseSSOService.login_with_email_at_web_app(response, app_code=state_from_query)

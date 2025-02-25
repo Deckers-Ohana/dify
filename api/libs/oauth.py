@@ -38,10 +38,10 @@ class OAuth:
 
 
 class GitHubOAuth(OAuth):
-    _AUTH_URL = 'https://github.com/login/oauth/authorize'
-    _TOKEN_URL = 'https://github.com/login/oauth/access_token'
-    _USER_INFO_URL = 'https://api.github.com/user'
-    _EMAIL_INFO_URL = 'https://api.github.com/user/emails'
+    _AUTH_URL = "https://github.com/login/oauth/authorize"
+    _TOKEN_URL = "https://github.com/login/oauth/access_token"
+    _USER_INFO_URL = "https://api.github.com/user"
+    _EMAIL_INFO_URL = "https://api.github.com/user/emails"
 
     def get_authorization_url(self, invite_token: Optional[str] = None):
         params = {
@@ -91,9 +91,9 @@ class GitHubOAuth(OAuth):
 
 
 class GoogleOAuth(OAuth):
-    _AUTH_URL = 'https://divzen.uat.turtle.deckers.com/oauth2/authorize'
-    _TOKEN_URL = 'https://divzen.uat.turtle.deckers.com/oauth2/token'
-    _USER_INFO_URL = 'https://divzen.uat.turtle.deckers.com/oauth2/userinfo'
+    _AUTH_URL = "https://divzen.uat.turtle.deckers.com/oauth2/authorize"
+    _TOKEN_URL = "https://divzen.uat.turtle.deckers.com/oauth2/token"
+    _USER_INFO_URL = "https://divzen.uat.turtle.deckers.com/oauth2/userinfo"
 
     def get_authorization_url(self, invite_token: Optional[str] = None):
         params = {
@@ -137,11 +137,7 @@ class GoogleOAuth(OAuth):
             email = payload["sub"]
         else:
             email = name + "@deckers.com"
-        return {
-            "sub": name,
-            "email": email,
-            "id": payload["id"]
-        }
+        return {"sub": name, "email": email, "id": payload["id"]}
 
     def _transform_user_info(self, raw_info: dict) -> OAuthUserInfo:
         return OAuthUserInfo(id=str(raw_info["id"]), name=str(raw_info["sub"]), email=raw_info["email"])
@@ -196,5 +192,6 @@ class DivZenOAuth(OAuth):
         return {"sub": name, "email": email, "id": payload["id"], "group": payload["group"]}
 
     def _transform_user_info(self, raw_info: dict) -> OAuthUserInfo:
-        return OAuthUserInfo(id=str(raw_info["id"]), name=str(raw_info["sub"]), email=raw_info["email"],
-                             group=raw_info["group"])
+        return OAuthUserInfo(
+            id=str(raw_info["id"]), name=str(raw_info["sub"]), email=raw_info["email"], group=raw_info["group"]
+        )

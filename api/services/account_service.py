@@ -214,12 +214,12 @@ class AccountService:
 
     @staticmethod
     def create_account(
-            email: str,
-            name: str,
-            interface_language: str,
-            password: Optional[str] = None,
-            interface_theme: str = "light",
-            is_setup: Optional[bool] = False,
+        email: str,
+        name: str,
+        interface_language: str,
+        password: Optional[str] = None,
+        interface_theme: str = "light",
+        is_setup: Optional[bool] = False,
     ) -> Account:
         """create account"""
         if not FeatureService.get_system_features().is_allow_register and not is_setup:
@@ -263,7 +263,7 @@ class AccountService:
 
     @staticmethod
     def create_account_and_tenant(
-            email: str, name: str, interface_language: str, password: Optional[str] = None
+        email: str, name: str, interface_language: str, password: Optional[str] = None
     ) -> Account:
         """create account"""
         account = AccountService.create_account(
@@ -411,10 +411,10 @@ class AccountService:
 
     @classmethod
     def send_reset_password_email(
-            cls,
-            account: Optional[Account] = None,
-            email: Optional[str] = None,
-            language: Optional[str] = "en-US",
+        cls,
+        account: Optional[Account] = None,
+        email: Optional[str] = None,
+        language: Optional[str] = "en-US",
     ):
         account_email = account.email if account else email
         if account_email is None:
@@ -447,7 +447,7 @@ class AccountService:
 
     @classmethod
     def send_email_code_login_email(
-            cls, account: Optional[Account] = None, email: Optional[str] = None, language: Optional[str] = "en-US"
+        cls, account: Optional[Account] = None, email: Optional[str] = None, language: Optional[str] = "en-US"
     ):
         email = account.email if account else email
         if email is None:
@@ -598,9 +598,9 @@ class TenantService:
     def create_tenant(name: str, is_setup: Optional[bool] = False, is_from_dashboard: Optional[bool] = False) -> Tenant:
         """Create tenant"""
         if (
-                not FeatureService.get_system_features().is_allow_create_workspace
-                and not is_setup
-                and not is_from_dashboard
+            not FeatureService.get_system_features().is_allow_create_workspace
+            and not is_setup
+            and not is_from_dashboard
         ):
             from controllers.console.error import NotAllowedCreateWorkspace
 
@@ -616,7 +616,7 @@ class TenantService:
 
     @staticmethod
     def create_owner_tenant_if_not_exist(
-            account: Account, name: Optional[str] = None, is_setup: Optional[bool] = False
+        account: Account, name: Optional[str] = None, is_setup: Optional[bool] = False
     ):
         """Check if user have a workspace or not"""
         available_ta = (
@@ -757,12 +757,12 @@ class TenantService:
             raise ValueError("all roles must be TenantAccountJoinRole")
 
         return (
-                db.session.query(TenantAccountJoin)
-                .filter(
-                    TenantAccountJoin.tenant_id == tenant.id, TenantAccountJoin.role.in_([role.value for role in roles])
-                )
-                .first()
-                is not None
+            db.session.query(TenantAccountJoin)
+            .filter(
+                TenantAccountJoin.tenant_id == tenant.id, TenantAccountJoin.role.in_([role.value for role in roles])
+            )
+            .first()
+            is not None
         )
 
     @staticmethod
@@ -893,16 +893,16 @@ class RegisterService:
 
     @classmethod
     def register(
-            cls,
-            email,
-            name,
-            password: Optional[str] = None,
-            open_id: Optional[str] = None,
-            provider: Optional[str] = None,
-            language: Optional[str] = None,
-            status: Optional[AccountStatus] = None,
-            is_setup: Optional[bool] = False,
-            create_workspace_required: Optional[bool] = True,
+        cls,
+        email,
+        name,
+        password: Optional[str] = None,
+        open_id: Optional[str] = None,
+        provider: Optional[str] = None,
+        language: Optional[str] = None,
+        status: Optional[AccountStatus] = None,
+        is_setup: Optional[bool] = False,
+        create_workspace_required: Optional[bool] = True,
     ) -> Account:
         db.session.begin_nested()
         """Register account"""
@@ -942,7 +942,7 @@ class RegisterService:
 
     @classmethod
     def invite_new_member(
-            cls, tenant: Tenant, email: str, language: str, role: str = "normal", inviter: Account | None = None
+        cls, tenant: Tenant, email: str, language: str, role: str = "normal", inviter: Account | None = None
     ) -> str:
         if not inviter:
             raise ValueError("Inviter is required")
@@ -1013,7 +1013,7 @@ class RegisterService:
 
     @classmethod
     def get_invitation_if_token_valid(
-            cls, workspace_id: Optional[str], email: str, token: str
+        cls, workspace_id: Optional[str], email: str, token: str
     ) -> Optional[dict[str, Any]]:
         invitation_data = cls._get_invitation_by_token(token, workspace_id, email)
         if not invitation_data:
@@ -1053,7 +1053,7 @@ class RegisterService:
 
     @classmethod
     def _get_invitation_by_token(
-            cls, token: str, workspace_id: Optional[str] = None, email: Optional[str] = None
+        cls, token: str, workspace_id: Optional[str] = None, email: Optional[str] = None
     ) -> Optional[dict[str, str]]:
         if workspace_id is not None and email is not None:
             email_hash = sha256(email.encode()).hexdigest()

@@ -64,14 +64,11 @@ class EnterpriseSSOService:
         if response is None or response.email is None:
             logger.exception(response)
             raise Exception("OIDC response is invalid")
-        return {
-            "access_token": cls.login_with_email(response),
-            "refresh_token": token.get("refresh_token")
-        }
+        return {"access_token": cls.login_with_email(response), "refresh_token": token.get("refresh_token")}
 
     @classmethod
     def login_with_email(cls, user_info: OAuthUserInfo) -> str:
-        account = _generate_account('divzen', user_info)
+        account = _generate_account("divzen", user_info)
         if account is None:
             raise Exception("account not found, please contact system admin to invite you to join in a workspace")
         if account.status == AccountStatus.BANNED:
@@ -84,7 +81,6 @@ class EnterpriseSSOService:
 
     @classmethod
     def login_with_email_at_web_app(cls, user_info: OAuthUserInfo, app_code: str) -> str:
-
         site = db.session.query(Site).filter(Site.code == app_code).first()
         if not site:
             raise NotFound()
@@ -113,7 +109,7 @@ class EnterpriseSSOService:
             "end_user_id": end_user.id,
             "external_user_id": user_info.id,
             "name": user_info.name,
-            "token_source": "sso"
+            "token_source": "sso",
         }
         tk = PassportService().issue(payload)
         return tk
