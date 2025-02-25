@@ -185,10 +185,7 @@ class DivZenOAuth(OAuth):
         # return response.json()
         payload = jwt.decode(token, verify=False, options={"verify_signature": False})
         name = payload["sub"]
-        if name.find("@"):
-            email = payload["sub"]
-        else:
-            email = name + "@deckers.com"
+        email = payload["email"]
         return {"sub": name, "email": email, "id": payload["id"], "group": payload["group"]}
 
     def _transform_user_info(self, raw_info: dict) -> OAuthUserInfo:
