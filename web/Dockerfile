@@ -6,7 +6,7 @@ LABEL maintainer="takatost@gmail.com"
 # RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 RUN apk add --no-cache --no-check-certificate tzdata \
-    && npm install -g pnpm
+    && npm install -g pnpm@9.12.2
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
