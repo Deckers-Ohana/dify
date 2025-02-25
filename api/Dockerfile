@@ -7,9 +7,8 @@ WORKDIR /app/api
 ENV POETRY_VERSION=2.0.1
 
 # if you located in China, you can use aliyun mirror to speed up
-# RUN pip install --no-cache-dir poetry==${POETRY_VERSION} -i https://mirrors.aliyun.com/pypi/simple/
-
-RUN pip install --no-cache-dir poetry==${POETRY_VERSION}
+# RUN pip install --no-cache-dir poetry==${POETRY_VERSION}
+RUN pip install -i https://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com --no-cache-dir poetry==${POETRY_VERSION}
 
 # Configure Poetry
 ENV POETRY_CACHE_DIR=/tmp/poetry_cache
@@ -27,8 +26,9 @@ RUN apt-get -o Acquire::Check-Date=false update \
     && apt-get install -y --no-install-recommends gcc g++ libc-dev libffi-dev libgmp-dev libmpfr-dev libmpc-dev
 
 # Install Python dependencies
-COPY pyproject.toml poetry.lock ./
-RUN poetry install --sync --no-cache --no-root
+COPY pyproject.toml  ./
+#COPY ca/cacert.pem ./
+RUN poetry config certificates.pypi-tuna.cert false && poetry install  --sync --no-cache --no-root
 
 # production stage
 FROM base AS production
@@ -39,7 +39,7 @@ ENV DEPLOY_ENV=PRODUCTION
 ENV CONSOLE_API_URL=http://127.0.0.1:5001
 ENV CONSOLE_WEB_URL=http://127.0.0.1:3000
 ENV SERVICE_API_URL=http://127.0.0.1:5001
-ENV APP_WEB_URL=http://127.0.0.1:3000
+ENV APP_WEB_URL=https://dify.dev.turtle.deckers.com
 
 EXPOSE 5001
 
