@@ -9,5 +9,6 @@ nodeServerContainerPipeline([
     publishImagePackages:[
         ['key':'dify-api','path':'/api','file':'Dockerfile'],
         ['key':'dify-web','path':'/web','file':'Dockerfile']
-    ]
+    ],
+    version: '1.0.0'
 ])
