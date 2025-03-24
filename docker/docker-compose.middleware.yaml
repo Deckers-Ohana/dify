@@ -66,7 +66,7 @@ services:
 
   # plugin daemon
   plugin_daemon:
-    image: harbor.turtle.deckers.com/docker.io/langgenius/dify-plugin-daemon:0.0.5-local
+    image: harbor.turtle.deckers.com/docker.io/langgenius/dify-plugin-daemon:0.0.6-local
     restart: always
     environment:
       # Use the shared environment variables.
