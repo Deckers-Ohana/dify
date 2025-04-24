@@ -85,7 +85,7 @@ const AppInfo = ({ expand }: IAppInfoProps) => {
       setAppDetail(app)
       mutateApps()
     }
-    catch (e) {
+    catch {
       notify({ type: 'error', message: t('app.editFailed') })
     }
   }, [appDetail, mutateApps, notify, setAppDetail, t])
@@ -112,7 +112,7 @@ const AppInfo = ({ expand }: IAppInfoProps) => {
       onPlanInfoChanged()
       getRedirection(true, newApp, replace)
     }
-    catch (e) {
+    catch {
       notify({ type: 'error', message: t('app.newApp.appCreateFailed') })
     }
   }
@@ -131,7 +131,7 @@ const AppInfo = ({ expand }: IAppInfoProps) => {
       a.download = `${appDetail.name}.yml`
       a.click()
     }
-    catch (e) {
+    catch {
       notify({ type: 'error', message: t('app.exportFailed') })
     }
   }
@@ -152,7 +152,7 @@ const AppInfo = ({ expand }: IAppInfoProps) => {
       }
       setSecretEnvList(list)
     }
-    catch (e) {
+    catch {
       notify({ type: 'error', message: t('app.exportFailed') })
     }
   }
@@ -175,7 +175,7 @@ const AppInfo = ({ expand }: IAppInfoProps) => {
       })
     }
     setShowConfirmDelete(false)
-  }, [appDetail, mutateApps, notify, onPlanInfoChanged, replace, t])
+  }, [appDetail, mutateApps, notify, onPlanInfoChanged, replace, setAppDetail, t])
 
   const { isCurrentWorkspaceEditor } = useAppContext()
 
@@ -242,7 +242,7 @@ const AppInfo = ({ expand }: IAppInfoProps) => {
             <div className='system-xs-regular text-text-tertiary'>{appDetail.description}</div>
           )}
           {/* operations */}
-          <div className='flex items-center gap-1 self-stretch'>
+          <div className='flex flex-wrap items-center gap-1 self-stretch'>
             <Button
               size={'small'}
               variant={'secondary'}
