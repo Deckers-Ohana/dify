@@ -9,11 +9,16 @@ from core.plugin.entities.plugin import (
     PluginInstallation,
     PluginInstallationSource,
 )
-from core.plugin.entities.plugin_daemon import PluginInstallTask, PluginInstallTaskStartResponse, PluginUploadResponse
-from core.plugin.manager.base import BasePluginManager
+from core.plugin.entities.plugin_daemon import (
+    PluginInstallTask,
+    PluginInstallTaskStartResponse,
+    PluginListResponse,
+    PluginUploadResponse,
+)
+from core.plugin.impl.base import BasePluginClient
 
 
-class PluginInstallationManager(BasePluginManager):
+class PluginInstaller(BasePluginClient):
     def fetch_plugin_by_identifier(
         self,
         tenant_id: str,
@@ -27,11 +32,20 @@ class PluginInstallationManager(BasePluginManager):
         )
 
     def list_plugins(self, tenant_id: str) -> list[PluginEntity]:
+        result = self._request_with_plugin_daemon_response(
+            "GET",
+            f"plugin/{tenant_id}/management/list",
+            PluginListResponse,
+            params={"page": 1, "page_size": 256},
+        )
+        return result.list
+
+    def list_plugins_with_total(self, tenant_id: str, page: int, page_size: int) -> PluginListResponse:
         return self._request_with_plugin_daemon_response(
             "GET",
             f"plugin/{tenant_id}/management/list",
-            list[PluginEntity],
-            params={"page": 1, "page_size": 256},
+            PluginListResponse,
+            params={"page": page, "page_size": page_size},
         )
 
     def upload_pkg(
