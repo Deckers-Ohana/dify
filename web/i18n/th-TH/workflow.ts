@@ -287,6 +287,7 @@ const translation = {
     organizeBlocks: 'จัดระเบียบบล็อก',
     change: 'เปลี่ยน',
     optional: '(ไม่บังคับ)',
+    moveToThisNode: 'ย้ายไปที่โหนดนี้',
   },
   nodes: {
     common: {

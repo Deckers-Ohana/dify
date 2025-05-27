@@ -287,6 +287,7 @@ const translation = {
     organizeBlocks: 'Organizează blocurile',
     change: 'Schimbă',
     optional: '(opțional)',
+    moveToThisNode: 'Mutați la acest nod',
   },
   nodes: {
     common: {

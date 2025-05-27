@@ -102,6 +102,7 @@ class DatasetRetrieverTool(DatasetRetrieverBaseTool):
         else:
             # get retrieval model , if the model is not setting , using default
             retrieval_model: dict[str, Any] = dataset.retrieval_model or default_retrieval_model
+            retrieval_resource_list = []
             if dataset.indexing_technique == "economy":
                 # use keyword table query
                 documents = RetrievalService.retrieve(
@@ -153,7 +154,7 @@ class DatasetRetrieverTool(DatasetRetrieverBaseTool):
                                     score=record.score,
                                 )
                             )
-                    retrieval_resource_list = []
+
                     if self.return_resource:
                         for record in records:
                             segment = record.segment

@@ -142,5 +142,6 @@ export type InputForm = {
   label: string
   variable: any
   required: boolean
+  hide: boolean
   [key: string]: any
 }

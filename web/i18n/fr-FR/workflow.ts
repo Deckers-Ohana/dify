@@ -287,6 +287,7 @@ const translation = {
     organizeBlocks: 'Organiser les blocs',
     change: 'Modifier',
     optional: '(facultatif)',
+    moveToThisNode: 'Déplacer vers ce nœud',
   },
   nodes: {
     common: {

@@ -90,6 +90,11 @@ export type CurrentPlanInfoBackend = {
   education: {
     enabled: boolean
     activated: boolean
+  },
+  webapp_copyright_enabled: boolean
+  workspace_members: {
+    size: number
+    limit: number
   }
 }
 

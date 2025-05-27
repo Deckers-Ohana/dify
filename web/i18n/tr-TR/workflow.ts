@@ -287,6 +287,7 @@ const translation = {
     organizeBlocks: 'Blokları Düzenle',
     change: 'Değiştir',
     optional: '(isteğe bağlı)',
+    moveToThisNode: 'Bu düğüme geç',
   },
   nodes: {
     common: {

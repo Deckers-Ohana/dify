@@ -287,6 +287,7 @@ const translation = {
     organizeBlocks: '블록 정리',
     change: '변경',
     optional: '(선택사항)',
+    moveToThisNode: '이 노드로 이동',
   },
   nodes: {
     common: {
