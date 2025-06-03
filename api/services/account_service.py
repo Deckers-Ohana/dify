@@ -31,7 +31,7 @@ from models.account import (
     TenantAccountRole,
     TenantStatus,
 )
-from models.model import DifySetup
+from models.model import DifySetup, Site
 from services.billing_service import BillingService
 from services.errors.account import (
     AccountAlreadyInTenantError,
@@ -137,6 +137,23 @@ class AccountService:
         exp = int(exp_dt.timestamp())
         payload = {
             "user_id": account.id,
+            "exp": exp,
+            "iss": dify_config.EDITION,
+            "sub": "Console API Passport",
+        }
+
+        token: str = PassportService().issue(payload)
+        return token
+
+    @staticmethod
+    def get_account_jwt_token_with_site(account: Account, site: Site) -> str:
+        exp_dt = datetime.now(UTC) + timedelta(minutes=dify_config.ACCESS_TOKEN_EXPIRE_MINUTES)
+        exp = int(exp_dt.timestamp())
+        payload = {
+            "user_id": account.id,
+            "end_user_id": account.id,
+            "app_code": site.code,
+            "app_id": site.app_id,
             "exp": exp,
             "iss": dify_config.EDITION,
             "sub": "Console API Passport",

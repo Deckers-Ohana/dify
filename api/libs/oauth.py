@@ -2,6 +2,7 @@ import urllib.parse
 from dataclasses import dataclass
 from typing import Optional
 
+import jwt
 import requests
 
 
@@ -10,6 +11,7 @@ class OAuthUserInfo:
     id: str
     name: str
     email: str
+    group: list[str]
 
 
 class OAuth:
@@ -89,9 +91,9 @@ class GitHubOAuth(OAuth):
 
 
 class GoogleOAuth(OAuth):
-    _AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
-    _TOKEN_URL = "https://oauth2.googleapis.com/token"
-    _USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
+    _AUTH_URL = "https://divzen.uat.turtle.deckers.com/oauth2/authorize"
+    _TOKEN_URL = "https://divzen.uat.turtle.deckers.com/oauth2/token"
+    _USER_INFO_URL = "https://divzen.uat.turtle.deckers.com/oauth2/userinfo"
 
     def get_authorization_url(self, invite_token: Optional[str] = None):
         params = {
@@ -124,10 +126,69 @@ class GoogleOAuth(OAuth):
         return access_token
 
     def get_raw_user_info(self, token: str):
-        headers = {"Authorization": f"Bearer {token}"}
-        response = requests.get(self._USER_INFO_URL, headers=headers)
-        response.raise_for_status()
-        return response.json()
+        # headers = {'Authorization': f"Bearer {token}"}
+        # response = requests.get(self._USER_INFO_URL, headers=headers)
+        # response.raise_for_status()
+        # return response.json()
+        payload = jwt.decode(token, verify=False, options={"verify_signature": False})
+        print(payload)
+        name = payload["sub"]
+        if name.find("@"):
+            email = payload["sub"]
+        else:
+            email = name + "@deckers.com"
+        return {"sub": name, "email": email, "id": payload["id"]}
 
     def _transform_user_info(self, raw_info: dict) -> OAuthUserInfo:
-        return OAuthUserInfo(id=str(raw_info["sub"]), name="", email=raw_info["email"])
+        return OAuthUserInfo(id=str(raw_info["id"]), name=str(raw_info["sub"]), email=raw_info["email"])
+
+
+class DivZenOAuth(OAuth):
+    _AUTH_URL = "https://divzen.uat.turtle.deckers.com/oauth2/authorize"
+    _TOKEN_URL = "https://divzen.uat.turtle.deckers.com/oauth2/token"
+    _USER_INFO_URL = "https://divzen.uat.turtle.deckers.com/oauth2/userinfo"
+
+    def get_authorization_url(self, invite_token: Optional[str] = None):
+        params = {
+            "client_id": self.client_id,
+            "response_type": "code",
+            "redirect_uri": self.redirect_uri,
+            "scope": "openid email",
+        }
+        if invite_token:
+            params["state"] = invite_token
+        return f"{self._AUTH_URL}?{urllib.parse.urlencode(params)}"
+
+    def get_access_token(self, code: str):
+        data = {
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "code": code,
+            "grant_type": "authorization_code",
+            "redirect_uri": self.redirect_uri,
+        }
+        headers = {"Accept": "application/json"}
+        response = requests.post(self._TOKEN_URL, data=data, headers=headers)
+
+        response_json = response.json()
+        access_token = response_json.get("access_token")
+
+        if not access_token:
+            raise ValueError(f"Error in Google OAuth: {response_json}")
+
+        return response_json
+
+    def get_raw_user_info(self, token: str):
+        # headers = {'Authorization': f"Bearer {token}"}
+        # response = requests.get(self._USER_INFO_URL, headers=headers)
+        # response.raise_for_status()
+        # return response.json()
+        payload = jwt.decode(token, verify=False, options={"verify_signature": False})
+        name = payload["sub"]
+        email = payload["email"]
+        return {"sub": name, "email": email, "id": payload["id"], "group": payload["group"]}
+
+    def _transform_user_info(self, raw_info: dict) -> OAuthUserInfo:
+        return OAuthUserInfo(
+            id=str(raw_info["id"]), name=str(raw_info["sub"]), email=raw_info["email"], group=raw_info["group"]
+        )
