@@ -10,5 +10,5 @@ nodeServerContainerPipeline([
         ['key':'dify-api','path':'/api','file':'Dockerfile'],
         ['key':'dify-web','path':'/web','file':'Dockerfile']
     ],
-    version: '1.4.0-1'
+    version: '1.4.1'
 ])
