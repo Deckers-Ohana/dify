@@ -9,7 +9,7 @@ class WebAppSettings(BaseModel):
         default="private_all",
         alias="accessMode",
     )
-
+#todo: need to adoption divZen for there to using access controller
 
 class EnterpriseService:
     @classmethod
