@@ -34,6 +34,7 @@ const SSOAuth: FC<SSOAuthProps> = ({
     }
     else if (protocol === SSOProtocol.OIDC) {
       getUserOIDCSSOUrl(invite_token).then((res) => {
+        document.cookie = `user-oidc-state=${res.state}`
         router.push(res.url)
       }).finally(() => {
         setIsLoading(false)
@@ -41,6 +42,7 @@ const SSOAuth: FC<SSOAuthProps> = ({
     }
     else if (protocol === SSOProtocol.OAuth2) {
       getUserOAuth2SSOUrl(invite_token).then((res) => {
+        document.cookie = `user-oauth2-state=${res.state}`
         router.push(res.url)
       }).finally(() => {
         setIsLoading(false)

@@ -9,6 +9,6 @@ storage mechanism.
 from core.workflow.repositories.workflow_node_execution_repository import OrderConfig, WorkflowNodeExecutionRepository
 
 __all__ = [
-    "RepositoryFactory",
+    "OrderConfig",
     "WorkflowNodeExecutionRepository",
 ]

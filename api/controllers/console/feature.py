@@ -1,9 +1,7 @@
-from flask_login import current_user  # type: ignore
-from flask_restful import Resource  # type: ignore
+from flask_login import current_user
+from flask_restful import Resource
 
 from libs.login import login_required
-
-# from services.enterprise.enterprise_service import EnterpriseService
 from services.feature_service import FeatureService
 
 from . import api
@@ -24,11 +22,5 @@ class SystemFeatureApi(Resource):
         return FeatureService.get_system_features().model_dump()
 
 
-# class EnterpriseFeatureApi(Resource):
-#     def get(self):
-#         return EnterpriseService.get_enterprise_features().dict()
-#
-
 api.add_resource(FeatureApi, "/features")
 api.add_resource(SystemFeatureApi, "/system-features")
-# api.add_resource(EnterpriseFeatureApi, "/enterprise-features")

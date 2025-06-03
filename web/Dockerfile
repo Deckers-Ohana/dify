@@ -15,6 +15,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 FROM base AS packages
 
 WORKDIR /app/web
+
 COPY package.json .
 COPY pnpm-lock.yaml .
 
