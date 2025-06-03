@@ -164,6 +164,10 @@ const translation = {
       title: 'โอปิก',
       description: 'Opik เป็นแพลตฟอร์มโอเพ่นซอร์สสําหรับการประเมิน ทดสอบ และตรวจสอบแอปพลิเคชัน LLM',
     },
+    weave: {
+      title: 'ทอ',
+      description: 'Weave เป็นแพลตฟอร์มโอเพนซอร์สสำหรับการประเมินผล ทดสอบ และตรวจสอบแอปพลิเคชัน LLM',
+    },
   },
   mermaid: {
     handDrawn: 'วาดด้วยมือ',
@@ -190,6 +194,52 @@ const translation = {
     noParams: 'ไม่จําเป็นต้องใช้พารามิเตอร์',
     label: 'แอพ',
   },
+  structOutput: {
+    notConfiguredTip: 'ยังไม่ได้กำหนดผลลัพธ์ที่มีโครงสร้าง',
+    moreFillTip: 'แสดงระดับการซ้อนสูงสุด 10 ระดับ',
+    structuredTip: 'Structured Outputs เป็นฟีเจอร์ที่ทำให้มั่นใจว่าโมเดลจะสร้างคำตอบที่สอดคล้องกับ JSON Schema ที่คุณกำหนดไว้เสมอ',
+    configure: 'กำหนดค่า',
+    required: 'ที่จำเป็น',
+    LLMResponse: 'LLM ตอบสนอง',
+    structured: 'มีระเบียบ',
+    modelNotSupported: 'โมเดลไม่ได้รับการสนับสนุน',
+    modelNotSupportedTip: 'โมเดลปัจจุบันไม่รองรับฟีเจอร์นี้และจะถูกลดระดับเป็นการฉีดคำสั่งโดยอัตโนมัติ.',
+  },
+  accessItemsDescription: {
+    anyone: 'ใครก็สามารถเข้าถึงเว็บแอปได้',
+    specific: 'สมาชิกหรือกลุ่มเฉพาะเท่านั้นที่สามารถเข้าถึงแอปเว็บได้',
+    organization: 'ใครก็ได้ในองค์กรสามารถเข้าถึงแอปเว็บได้',
+  },
+  accessControlDialog: {
+    accessItems: {
+      specific: 'กลุ่มหรือสมาชิกเฉพาะ',
+      organization: 'เฉพาะสมาชิกภายในองค์กร',
+      anyone: 'ใครก็ตามที่มีลิงก์',
+    },
+    operateGroupAndMember: {
+      searchPlaceholder: 'ค้นหากลุ่มและสมาชิก',
+      allMembers: 'สมาชิกทั้งหมด',
+      noResult: 'ไม่มีผลลัพธ์',
+      expand: 'ขยาย',
+    },
+    title: 'การควบคุมการเข้าถึงเว็บแอปพลิเคชัน',
+    description: 'ตั้งค่าสิทธิ์การเข้าถึงเว็บแอป',
+    accessLabel: 'ใครมีสิทธิ์เข้าถึง',
+    groups_one: '{{count}} กลุ่ม',
+    groups_other: '{{count}} กลุ่ม',
+    members_one: '{{count}} สมาชิก',
+    noGroupsOrMembers: 'ไม่มีกลุ่มหรือสมาชิกที่เลือก',
+    webAppSSONotEnabledTip: 'กรุณาติดต่อผู้ดูแลระบบองค์กรเพื่อกำหนดวิธีการตรวจสอบสิทธิ์แอปเว็บ.',
+    updateSuccess: 'อัปเดตสำเร็จแล้ว',
+    members_other: '{{count}} สมาชิก',
+  },
+  publishApp: {
+    title: 'ใครสามารถเข้าถึงแอปเว็บได้',
+    notSet: 'ยังไม่ได้ตั้งค่า',
+    notSetDesc: 'ขณะนี้ไม่มีใครสามารถเข้าถึงแอปเว็บได้ กรุณาเพิ่มสิทธิ์การเข้าถึง.',
+  },
+  accessControl: 'การควบคุมการเข้าถึงเว็บแอปพลิเคชัน',
+  noAccessPermission: 'ไม่มีสิทธิ์เข้าถึงเว็บแอป',
 }
 
 export default translation

@@ -479,7 +479,6 @@ const translation = {
       'variable': 'Spremenljivka',
     },
     tool: {
-      toAuthorize: 'Za avtorizacijo',
       inputVars: 'Vhodne spremenljivke',
       outputVars: {
         text: 'orodje je ustvarilo vsebino',
@@ -1022,6 +1021,7 @@ const translation = {
       },
       inputVars: 'Vhodne spremenljivke',
       toAuthorize: 'Za odobritev',
+      authorize: 'Pooblasti',
     },
     questionClassifiers: {
       outputVars: {

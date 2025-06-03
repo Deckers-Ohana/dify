@@ -168,6 +168,10 @@ const translation = {
       description: 'Opik je odprtokodna platforma za ocenjevanje, testiranje in spremljanje aplikacij LLM.',
       title: 'Opik',
     },
+    weave: {
+      title: 'Tkanje',
+      description: 'Weave je odprtokodna platforma za vrednotenje, testiranje in spremljanje aplikacij LLM.',
+    },
   },
   mermaid: {
     handDrawn: 'Ročno narisano',
@@ -194,6 +198,52 @@ const translation = {
     label: 'APL',
     placeholder: 'Izberite aplikacijo ...',
   },
+  structOutput: {
+    configure: 'Konfiguriraj',
+    structured: 'Strukturirano',
+    modelNotSupported: 'Model ni podprt',
+    required: 'Zahtevano',
+    moreFillTip: 'Prikazovanje največ 10 ravni gnezdenja',
+    LLMResponse: 'LLM odziv',
+    notConfiguredTip: 'Strukturiranega izhoda še ni mogoče konfigurirati',
+    modelNotSupportedTip: 'Trenutni model ne podpira te funkcije in se samodejno zniža na vbrizgavanje pozivov.',
+    structuredTip: 'Strukturirani izhodi so funkcija, ki zagotavlja, da bo model vedno generiral odgovore, ki se držijo vašega posredovanega JSON sheme.',
+  },
+  accessItemsDescription: {
+    anyone: 'Vsakdo lahko dostopa do spletne aplikacije',
+    specific: 'Samo določenim skupinam ali članom je omogočen dostop do spletne aplikacije',
+    organization: 'Vsakdo v organizaciji lahko dostopa do spletne aplikacije',
+  },
+  accessControlDialog: {
+    accessItems: {
+      anyone: 'Kdorkoli s povezavo',
+      specific: 'Specifične skupine ali člani',
+      organization: 'Samo člani znotraj podjetja',
+    },
+    operateGroupAndMember: {
+      searchPlaceholder: 'Išči skupine in člane',
+      allMembers: 'Vsi člani',
+      expand: 'Razširi',
+      noResult: 'Brez rezultata',
+    },
+    title: 'Nadzor dostopa do spletne aplikacije',
+    description: 'Nastavite dovoljenja za dostop do spletne aplikacije',
+    accessLabel: 'Kdo ima dostop',
+    groups_one: '{{count}} SKUPINA',
+    groups_other: '{{count}} SKUPIN',
+    members_one: '{{count}} ČLAN',
+    members_other: '{{count}} ČLANOV',
+    updateSuccess: 'Posodobitev uspešna',
+    noGroupsOrMembers: 'Nobene skupine ali članov ni izbranih',
+    webAppSSONotEnabledTip: 'Prosimo, da se obrnete na skrbnika podjetja, da konfigurira način avtentikacije spletne aplikacije.',
+  },
+  publishApp: {
+    title: 'Kdo lahko dostopa do spletne aplikacije',
+    notSet: 'Ni nastavljeno',
+    notSetDesc: 'Trenutno nihče ne more dostopati do spletne aplikacije. Prosimo, nastavite dovoljenja.',
+  },
+  accessControl: 'Nadzor dostopa do spletne aplikacije',
+  noAccessPermission: 'Brez dovoljenja za dostop do spletne aplikacije',
 }
 
 export default translation

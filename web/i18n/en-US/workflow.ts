@@ -649,7 +649,7 @@ const translation = {
       'assignedVarsDescription': 'Assigned variables must be writable variables, such as conversation variables.',
     },
     tool: {
-      toAuthorize: 'To authorize',
+      authorize: 'Authorize',
       inputVars: 'Input Variables',
       outputVars: {
         text: 'tool generated content',

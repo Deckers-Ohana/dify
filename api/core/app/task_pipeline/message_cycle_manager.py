@@ -17,6 +17,8 @@ from core.app.entities.queue_entities import (
     QueueRetrieverResourcesEvent,
 )
 from core.app.entities.task_entities import (
+    AnnotationReply,
+    AnnotationReplyAccount,
     EasyUITaskState,
     MessageFileStreamResponse,
     MessageReplaceStreamResponse,
@@ -24,13 +26,13 @@ from core.app.entities.task_entities import (
     WorkflowTaskState,
 )
 from core.llm_generator.llm_generator import LLMGenerator
-from core.tools.tool_file_manager import ToolFileManager
+from core.tools.signature import sign_tool_file
 from extensions.ext_database import db
 from models.model import AppMode, Conversation, MessageAnnotation, MessageFile
 from services.annotation_service import AppAnnotationService
 
 
-class MessageCycleManage:
+class MessageCycleManager:
     def __init__(
         self,
         *,
@@ -45,7 +47,7 @@ class MessageCycleManage:
         self._application_generate_entity = application_generate_entity
         self._task_state = task_state
 
-    def _generate_conversation_name(self, *, conversation_id: str, query: str) -> Optional[Thread]:
+    def generate_conversation_name(self, *, conversation_id: str, query: str) -> Optional[Thread]:
         """
         Generate conversation name.
         :param conversation_id: conversation id
@@ -102,7 +104,7 @@ class MessageCycleManage:
                 db.session.commit()
                 db.session.close()
 
-    def _handle_annotation_reply(self, event: QueueAnnotationReplyEvent) -> Optional[MessageAnnotation]:
+    def handle_annotation_reply(self, event: QueueAnnotationReplyEvent) -> Optional[MessageAnnotation]:
         """
         Handle annotation reply.
         :param event: event
@@ -111,25 +113,28 @@ class MessageCycleManage:
         annotation = AppAnnotationService.get_annotation_by_id(event.message_annotation_id)
         if annotation:
             account = annotation.account
-            self._task_state.metadata["annotation_reply"] = {
-                "id": annotation.id,
-                "account": {"id": annotation.account_id, "name": account.name if account else "Dify user"},
-            }
+            self._task_state.metadata.annotation_reply = AnnotationReply(
+                id=annotation.id,
+                account=AnnotationReplyAccount(
+                    id=annotation.account_id,
+                    name=account.name if account else "Dify user",
+                ),
+            )
 
             return annotation
 
         return None
 
-    def _handle_retriever_resources(self, event: QueueRetrieverResourcesEvent) -> None:
+    def handle_retriever_resources(self, event: QueueRetrieverResourcesEvent) -> None:
         """
         Handle retriever resources.
         :param event: event
         :return:
         """
         if self._application_generate_entity.app_config.additional_features.show_retrieve_source:
-            self._task_state.metadata["retriever_resources"] = event.retriever_resources
+            self._task_state.metadata.retriever_resources = event.retriever_resources
 
-    def _message_file_to_stream_response(self, event: QueueMessageFileEvent) -> Optional[MessageFileStreamResponse]:
+    def message_file_to_stream_response(self, event: QueueMessageFileEvent) -> Optional[MessageFileStreamResponse]:
         """
         Message file to stream response.
         :param event: event
@@ -154,7 +159,7 @@ class MessageCycleManage:
             if message_file.url.startswith("http"):
                 url = message_file.url
             else:
-                url = ToolFileManager.sign_file(tool_file_id=tool_file_id, extension=extension)
+                url = sign_tool_file(tool_file_id=tool_file_id, extension=extension)
 
             return MessageFileStreamResponse(
                 task_id=self._application_generate_entity.task_id,
@@ -166,7 +171,7 @@ class MessageCycleManage:
 
         return None
 
-    def _message_to_stream_response(
+    def message_to_stream_response(
         self, answer: str, message_id: str, from_variable_selector: Optional[list[str]] = None
     ) -> MessageStreamResponse:
         """
@@ -182,10 +187,12 @@ class MessageCycleManage:
             from_variable_selector=from_variable_selector,
         )
 
-    def _message_replace_to_stream_response(self, answer: str) -> MessageReplaceStreamResponse:
+    def message_replace_to_stream_response(self, answer: str, reason: str = "") -> MessageReplaceStreamResponse:
         """
         Message replace to stream response.
         :param answer: answer
         :return:
         """
-        return MessageReplaceStreamResponse(task_id=self._application_generate_entity.task_id, answer=answer)
+        return MessageReplaceStreamResponse(
+            task_id=self._application_generate_entity.task_id, answer=answer, reason=reason
+        )

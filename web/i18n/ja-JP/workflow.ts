@@ -650,7 +650,6 @@ const translation = {
       'assignedVarsDescription': '代入される変数は、会話変数などの書き込み可能な変数である必要があります。',
     },
     tool: {
-      toAuthorize: '承認するには',
       inputVars: '入力変数',
       outputVars: {
         text: 'ツールが生成したコンテンツ',
@@ -663,6 +662,7 @@ const translation = {
         },
         json: 'ツールで生成されたJSON',
       },
+      authorize: '認証する',
     },
     questionClassifiers: {
       model: 'モデル',

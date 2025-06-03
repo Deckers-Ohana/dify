@@ -573,7 +573,6 @@ const translation = {
       'selectAssignedVariable': 'Выберите назначенную переменную...',
     },
     tool: {
-      toAuthorize: 'Авторизовать',
       inputVars: 'Входные переменные',
       outputVars: {
         text: 'контент, сгенерированный инструментом',
@@ -586,6 +585,7 @@ const translation = {
         },
         json: 'json, сгенерированный инструментом',
       },
+      authorize: 'Авторизовать',
     },
     questionClassifiers: {
       model: 'модель',

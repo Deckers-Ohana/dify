@@ -159,6 +159,10 @@ const translation = {
       description: 'Opik é uma plataforma de código aberto para avaliar, testar e monitorar aplicativos LLM.',
       title: 'Opik',
     },
+    weave: {
+      description: 'Weave é uma plataforma de código aberto para avaliar, testar e monitorar aplicações de LLM.',
+      title: 'Trançar',
+    },
   },
   answerIcon: {
     descriptionInExplore: 'Se o ícone do web app deve ser usado para substituir 🤖 no Explore',
@@ -194,6 +198,52 @@ const translation = {
     placeholder: 'Selecione um aplicativo...',
     params: 'PARÂMETROS DO APLICATIVO',
   },
+  structOutput: {
+    LLMResponse: 'Resposta do LLM',
+    configure: 'Configurar',
+    required: 'Requerido',
+    modelNotSupported: 'Modelo não suportado',
+    structured: 'Estruturado',
+    modelNotSupportedTip: 'O modelo atual não suporta esse recurso e é automaticamente rebaixado para injeção de prompt.',
+    structuredTip: 'Saídas Estruturadas é um recurso que garante que o modelo sempre gerará respostas que seguem o seu Esquema JSON fornecido.',
+    moreFillTip: 'Mostrando um máximo de 10 níveis de aninhamento',
+    notConfiguredTip: 'A saída estruturada ainda não foi configurada.',
+  },
+  accessItemsDescription: {
+    anyone: 'Qualquer pessoa pode acessar o aplicativo web',
+    specific: 'Apenas grupos ou membros específicos podem acessar o aplicativo web',
+    organization: 'Qualquer pessoa na organização pode acessar o aplicativo web',
+  },
+  accessControlDialog: {
+    accessItems: {
+      anyone: 'Qualquer pessoa com o link',
+      specific: 'Grupos específicos ou membros',
+      organization: 'Apenas membros dentro da empresa',
+    },
+    operateGroupAndMember: {
+      searchPlaceholder: 'Pesquisar grupos e membros',
+      allMembers: 'Todos os membros',
+      expand: 'Expandir',
+      noResult: 'Nenhum resultado',
+    },
+    title: 'Controle de Acesso do Aplicativo Web',
+    description: 'Defina as permissões de acesso do aplicativo da web',
+    accessLabel: 'Quem tem acesso',
+    groups_one: '{{count}} GRUPO',
+    groups_other: '{{count}} GRUPOS',
+    members_other: '{{count}} MEMBROS',
+    noGroupsOrMembers: 'Nenhum grupo ou membro selecionado',
+    updateSuccess: 'Atualização bem-sucedida',
+    members_one: '{{count}} MEMBRO',
+    webAppSSONotEnabledTip: 'Por favor, entre em contato com o administrador da empresa para configurar o método de autenticação da aplicação web.',
+  },
+  publishApp: {
+    title: 'Quem pode acessar o aplicativo web',
+    notSet: 'Não definido',
+    notSetDesc: 'Atualmente, ninguém pode acessar o aplicativo web. Por favor, defina as permissões.',
+  },
+  accessControl: 'Controle de Acesso do Aplicativo Web',
+  noAccessPermission: 'Sem permissão para acessar o aplicativo web',
 }
 
 export default translation

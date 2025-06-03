@@ -1,7 +1,7 @@
 services:
   # The postgres database.
   db:
-    image: harbor.turtle.deckers.com/docker.io/postgres:15-alpine
+    image: postgres:15-alpine
     restart: always
     env_file:
       - ./middleware.env
@@ -27,7 +27,7 @@ services:
 
   # The redis cache.
   redis:
-    image: harbor.turtle.deckers.com/docker.io/redis:6-alpine
+    image: redis:6-alpine
     restart: always
     env_file:
       - ./middleware.env
@@ -45,7 +45,7 @@ services:
 
   # The DifySandbox
   sandbox:
-    image: harbor.turtle.deckers.com/docker.io/langgenius/dify-sandbox:0.2.12
+    image: langgenius/dify-sandbox:0.2.12
     restart: always
     env_file:
       - ./middleware.env
@@ -71,7 +71,7 @@ services:
 
   # plugin daemon
   plugin_daemon:
-    image: harbor.turtle.deckers.com/docker.io/langgenius/dify-plugin-daemon:0.0.10-local
+    image: langgenius/dify-plugin-daemon:0.1.1-local
     restart: always
     env_file:
       - ./middleware.env
@@ -131,7 +131,7 @@ services:
   # for more information, please refer to
   # https://docs.dify.ai/learn-more/faq/install-faq#18-why-is-ssrf-proxy-needed%3F
   ssrf_proxy:
-    image: harbor.turtle.deckers.com/docker.io/ubuntu/squid:latest
+    image: ubuntu/squid:latest
     restart: always
     volumes:
       - ./ssrf_proxy/squid.conf.template:/etc/squid/squid.conf.template
@@ -155,7 +155,7 @@ services:
 
   # The Weaviate vector store.
   weaviate:
-    image: harbor.turtle.deckers.com/docker.io/semitechnologies/weaviate:1.19.0
+    image: semitechnologies/weaviate:1.19.0
     profiles:
       - ""
       - weaviate

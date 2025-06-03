@@ -159,6 +159,10 @@ const translation = {
       description: 'Opik est une plate-forme open-source pour l’évaluation, le test et la surveillance des applications LLM.',
       title: 'Opik',
     },
+    weave: {
+      title: 'Tisser',
+      description: 'Weave est une plateforme open-source pour évaluer, tester et surveiller les applications LLM.',
+    },
   },
   answerIcon: {
     description: 'S’il faut utiliser l’icône web app pour remplacer 🤖 dans l’application partagée',
@@ -194,6 +198,51 @@ const translation = {
     label: 'APPLI',
     placeholder: 'Sélectionnez une application...',
   },
+  structOutput: {
+    LLMResponse: 'Réponse LLM',
+    notConfiguredTip: 'La sortie structurée n\'a pas encore été configurée.',
+    required: 'Obligatoire',
+    structuredTip: 'Les sorties structurées sont une fonctionnalité qui garantit que le modèle générera toujours des réponses qui respectent votre schéma JSON fourni.',
+    modelNotSupportedTip: 'Le modèle actuel ne prend pas en charge cette fonctionnalité et est automatiquement rétrogradé à l\'injection de prompt.',
+    modelNotSupported: 'Modèle non pris en charge',
+    moreFillTip: 'Affichage d\'un maximum de 10 niveaux d\'imbrication',
+    configure: 'Configurer',
+  },
+  accessItemsDescription: {
+    anyone: 'Tout le monde peut accéder à l\'application web.',
+    specific: 'Seules des groupes ou membres spécifiques peuvent accéder à l\'application web.',
+    organization: 'Toute personne dans l\'organisation peut accéder à l\'application web.',
+  },
+  accessControlDialog: {
+    accessItems: {
+      anyone: 'Quiconque avec le lien',
+      specific: 'Groupes ou membres spécifiques',
+      organization: 'Seuls les membres au sein de l\'entreprise',
+    },
+    operateGroupAndMember: {
+      searchPlaceholder: 'Rechercher des groupes et des membres',
+      allMembers: 'Tous les membres',
+      expand: 'Développer',
+      noResult: 'Aucun résultat',
+    },
+    title: 'Contrôle d\'accès à l\'application Web',
+    description: 'Définir les autorisations d\'accès à l\'application web',
+    accessLabel: 'Qui a accès',
+    groups_one: '{{count}} GROUPE',
+    groups_other: '{{count}} GROUPES',
+    members_one: '{{count}} MEMBRE',
+    members_other: '{{count}} MEMBRES',
+    noGroupsOrMembers: 'Aucun groupe ou membre sélectionné',
+    webAppSSONotEnabledTip: 'Veuillez contacter l\'administrateur de l\'entreprise pour configurer la méthode d\'authentification de l\'application web.',
+    updateSuccess: 'Mise à jour réussie',
+  },
+  publishApp: {
+    title: 'Qui peut accéder à l\'application web',
+    notSet: 'Non défini',
+    notSetDesc: 'Actuellement, personne ne peut accéder à l\'application web. Veuillez définir les autorisations.',
+  },
+  accessControl: 'Contrôle d\'accès à l\'application Web',
+  noAccessPermission: 'Pas de permission d\'accéder à l\'application web',
 }
 
 export default translation

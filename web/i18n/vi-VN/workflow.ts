@@ -573,7 +573,6 @@ const translation = {
       'variables': 'Biến',
     },
     tool: {
-      toAuthorize: 'Ủy quyền',
       inputVars: 'Biến đầu vào',
       outputVars: {
         text: 'nội dung do công cụ tạo ra',
@@ -586,6 +585,7 @@ const translation = {
         },
         json: 'JSON được tạo bởi công cụ',
       },
+      authorize: 'Ủy quyền',
     },
     questionClassifiers: {
       model: 'mô hình',

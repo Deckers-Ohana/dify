@@ -159,6 +159,10 @@ const translation = {
       description: 'Opik este o platformă open-source pentru evaluarea, testarea și monitorizarea aplicațiilor LLM.',
       title: 'Opik',
     },
+    weave: {
+      title: 'Împletește',
+      description: 'Weave este o platformă open-source pentru evaluarea, testarea și monitorizarea aplicațiilor LLM.',
+    },
   },
   answerIcon: {
     descriptionInExplore: 'Dacă să utilizați pictograma web app pentru a înlocui 🤖 în Explore',
@@ -194,6 +198,52 @@ const translation = {
     noParams: 'Nu sunt necesari parametri',
     placeholder: 'Selectați o aplicație...',
   },
+  structOutput: {
+    notConfiguredTip: 'Ieșirea structurată nu a fost configurată încă',
+    LLMResponse: 'Răspuns LLM',
+    required: 'Necesar',
+    moreFillTip: 'Afișând maxim 10 niveluri de imbricare',
+    structured: 'Structurat',
+    modelNotSupported: 'Modelul nu este suportat',
+    structuredTip: 'Ieșirile structurate sunt o caracteristică care asigură că modelul va genera întotdeauna răspunsuri care respectă schema JSON furnizată.',
+    configure: 'Configurează',
+    modelNotSupportedTip: 'Modelul actual nu suportă această funcție și este downgradat automat la injecția de prompt.',
+  },
+  accessItemsDescription: {
+    specific: 'Numai grupuri sau membri specifici pot accesa aplicația web.',
+    organization: 'Oricine din organizație poate accesa aplicația web',
+    anyone: 'Oricine poate accesa aplicația web',
+  },
+  accessControlDialog: {
+    accessItems: {
+      anyone: 'Oricine are linkul',
+      specific: 'Grupuri sau membri specifici',
+      organization: 'Numai membrii din cadrul întreprinderii',
+    },
+    operateGroupAndMember: {
+      searchPlaceholder: 'Caută grupuri și membri',
+      allMembers: 'Toți membrii',
+      expand: 'Expandează',
+      noResult: 'Niciun rezultat',
+    },
+    title: 'Controlul Accesului la Aplicația Web',
+    description: 'Setați permisiunile de acces la aplicația web',
+    accessLabel: 'Cine are acces',
+    groups_one: '{{count}} GRUP',
+    groups_other: '{{count}} GRUPURI',
+    members_one: '{{count}} MEMBRU',
+    members_other: '{{count}} MEMBRI',
+    noGroupsOrMembers: 'Niciun grup sau membri selectați',
+    webAppSSONotEnabledTip: 'Vă rugăm să contactați administratorul de întreprindere pentru a configura metoda de autentificare a aplicației web.',
+    updateSuccess: 'Actualizare reușită',
+  },
+  publishApp: {
+    title: 'Cine poate accesa aplicația web',
+    notSet: 'Nu este setat',
+    notSetDesc: 'În prezent, nimeni nu poate accesa aplicația web. Vă rugăm să setați permisiunile.',
+  },
+  accessControl: 'Controlul Accesului la Aplicația Web',
+  noAccessPermission: 'Nici o permisiune pentru a accesa aplicația web',
 }
 
 export default translation

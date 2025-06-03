@@ -573,7 +573,6 @@ const translation = {
       'setParameter': 'Встановити параметр...',
     },
     tool: {
-      toAuthorize: 'Авторизувати',
       inputVars: 'Вхідні змінні',
       outputVars: {
         text: 'генерований вміст інструменту',
@@ -586,6 +585,7 @@ const translation = {
         },
         json: 'JSON, згенерований інструментом',
       },
+      authorize: 'Уповноважити',
     },
     questionClassifiers: {
       model: 'модель',
