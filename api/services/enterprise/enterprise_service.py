@@ -33,28 +33,28 @@ class EnterpriseService:
             if not app_id:
                 raise ValueError("app_id must be provided.")
             params = {"appId": app_id}
-            data = EnterpriseRequest.send_request("GET", "/webapp/access-mode/id", params=params)
-            if not data:
-                raise ValueError("No data found.")
-            return WebAppSettings(**data)
+            # data = EnterpriseRequest.send_request("GET", "/webapp/access-mode/id", params=params)
+            # if not data:
+            #     raise ValueError("No data found.")
+            return WebAppSettings()
 
         @classmethod
         def batch_get_app_access_mode_by_id(cls, app_ids: list[str]) -> dict[str, WebAppSettings]:
             if not app_ids:
                 return {}
-            body = {"appIds": app_ids}
-            data: dict[str, str] = EnterpriseRequest.send_request("POST", "/webapp/access-mode/batch/id", json=body)
-            if not data:
-                raise ValueError("No data found.")
-
-            if not isinstance(data["accessModes"], dict):
-                raise ValueError("Invalid data format.")
+            # body = {"appIds": app_ids}
+            # data: dict[str, str] = EnterpriseRequest.send_request("POST", "/webapp/access-mode/batch/id", json=body)
+            # if not data:
+            #     raise ValueError("No data found.")
+            #
+            # if not isinstance(data["accessModes"], dict):
+            #     raise ValueError("Invalid data format.")
 
             ret = {}
-            for key, value in data["accessModes"].items():
+            for value in app_ids:
                 curr = WebAppSettings()
-                curr.access_mode = value
-                ret[key] = curr
+                curr.access_mode = "private"
+                ret[value] = curr
 
             return ret
 

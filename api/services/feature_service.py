@@ -13,7 +13,7 @@ class SubscriptionModel(BaseModel):
 
 
 class BillingModel(BaseModel):
-    enabled: bool = False
+    enabled: bool = True
     subscription: SubscriptionModel = SubscriptionModel()
 
 
@@ -34,7 +34,7 @@ class LicenseLimitationModel(BaseModel):
     - limit: maximum allowed count; 0 means unlimited
     """
 
-    enabled: bool = Field(False, description="Whether this limit is currently active")
+    enabled: bool = Field(True, description="Whether this limit is currently active")
     size: int = Field(0, description="Number of resources already consumed")
     limit: int = Field(0, description="Maximum number of resources allowed; 0 means no limit")
 
@@ -69,7 +69,7 @@ class LicenseModel(BaseModel):
 
 
 class BrandingModel(BaseModel):
-    enabled: bool = False
+    enabled: bool = True
     application_title: str = ""
     login_page_logo: str = ""
     workspace_logo: str = ""
@@ -77,54 +77,54 @@ class BrandingModel(BaseModel):
 
 
 class WebAppAuthSSOModel(BaseModel):
-    protocol: str = ""
+    protocol: str = "oidc"
 
 
 class WebAppAuthModel(BaseModel):
-    enabled: bool = False
-    allow_sso: bool = False
+    enabled: bool = True
+    allow_sso: bool = True
     sso_config: WebAppAuthSSOModel = WebAppAuthSSOModel()
-    allow_email_code_login: bool = False
-    allow_email_password_login: bool = False
+    allow_email_code_login: bool = True
+    allow_email_password_login: bool = True
 
 
 class FeatureModel(BaseModel):
     billing: BillingModel = BillingModel()
     education: EducationModel = EducationModel()
-    members: LimitationModel = LimitationModel(size=0, limit=1)
-    apps: LimitationModel = LimitationModel(size=0, limit=10)
-    vector_space: LimitationModel = LimitationModel(size=0, limit=5)
-    knowledge_rate_limit: int = 10
+    members: LimitationModel = LimitationModel(size=0, limit=0)
+    apps: LimitationModel = LimitationModel(size=0, limit=0)
+    vector_space: LimitationModel = LimitationModel(size=0, limit=0)
+    knowledge_rate_limit: int = 100
     annotation_quota_limit: LimitationModel = LimitationModel(size=0, limit=10)
     documents_upload_quota: LimitationModel = LimitationModel(size=0, limit=50)
     docs_processing: str = "standard"
-    can_replace_logo: bool = False
-    model_load_balancing_enabled: bool = False
-    dataset_operator_enabled: bool = False
-    webapp_copyright_enabled: bool = False
-    workspace_members: LicenseLimitationModel = LicenseLimitationModel(enabled=False, size=0, limit=0)
+    can_replace_logo: bool = True
+    model_load_balancing_enabled: bool = True
+    dataset_operator_enabled: bool = True
+    webapp_copyright_enabled: bool = True
+    workspace_members: LicenseLimitationModel = LicenseLimitationModel(enabled=True, size=0, limit=0)
 
     # pydantic configs
     model_config = ConfigDict(protected_namespaces=())
 
 
 class KnowledgeRateLimitModel(BaseModel):
-    enabled: bool = False
-    limit: int = 10
+    enabled: bool = True
+    limit: int = 100
     subscription_plan: str = ""
 
 
 class SystemFeatureModel(BaseModel):
-    sso_enforced_for_signin: bool = False
-    sso_enforced_for_signin_protocol: str = ""
-    enable_marketplace: bool = False
+    sso_enforced_for_signin: bool = True
+    sso_enforced_for_signin_protocol: str = "oidc"
+    enable_marketplace: bool = True
     max_plugin_package_size: int = dify_config.PLUGIN_MAX_PACKAGE_SIZE
-    enable_email_code_login: bool = False
+    enable_email_code_login: bool = True
     enable_email_password_login: bool = True
-    enable_social_oauth_login: bool = False
-    is_allow_register: bool = False
-    is_allow_create_workspace: bool = False
-    is_email_setup: bool = False
+    enable_social_oauth_login: bool = True
+    is_allow_register: bool = True
+    is_allow_create_workspace: bool = True
+    is_email_setup: bool = True
     license: LicenseModel = LicenseModel()
     branding: BrandingModel = BrandingModel()
     webapp_auth: WebAppAuthModel = WebAppAuthModel()

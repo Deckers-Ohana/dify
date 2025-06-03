@@ -18,6 +18,7 @@ class EnterpriseRequest:
         url = f"{cls.base_url}{endpoint}"
         # response = requests.request(method, url, json=json, params=params, headers=headers)
         return {
+            "accessModes": "public",
             "sso_enforced_for_signin": True,
             "sso_enforced_for_signin_protocol": "oidc",
             "sso_enforced_for_web": True,
