@@ -159,7 +159,7 @@ class AppService:
 
         if FeatureService.get_system_features().webapp_auth.enabled:
             # update web app setting as private
-            EnterpriseService.WebAppAuth.update_app_access_mode(app.id, "private")
+            EnterpriseService.WebAppAuth.update_app_access_mode(app.id, "private_all")
 
         return app
 

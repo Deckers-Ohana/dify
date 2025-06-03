@@ -6,7 +6,7 @@ from services.enterprise.base import EnterpriseRequest
 class WebAppSettings(BaseModel):
     access_mode: str = Field(
         description="Access mode for the web app. Can be 'public' or 'private'",
-        default="private",
+        default="private_all",
         alias="accessMode",
     )
 
@@ -53,7 +53,7 @@ class EnterpriseService:
             ret = {}
             for value in app_ids:
                 curr = WebAppSettings()
-                curr.access_mode = "private"
+                curr.access_mode = "private_all"
                 ret[value] = curr
 
             return ret
@@ -66,7 +66,7 @@ class EnterpriseService:
             data = EnterpriseRequest.send_request("GET", "/webapp/access-mode/code", params=params)
             if not data:
                 raise ValueError("No data found.")
-            return WebAppSettings(**data)
+            return WebAppSettings()
 
         @classmethod
         def update_app_access_mode(cls, app_id: str, access_mode: str):
