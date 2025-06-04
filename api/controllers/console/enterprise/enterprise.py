@@ -25,4 +25,4 @@ class EnterpriseAppSubjects(Resource):
 
 
 api.add_resource(EnterpriseAppPermission, "/enterprise/webapp/permission")
-api.add_resource(EnterpriseAppPermission, "/enterprise/webapp/app/subjects")
+api.add_resource(EnterpriseAppSubjects, "/enterprise/webapp/app/subjects")
