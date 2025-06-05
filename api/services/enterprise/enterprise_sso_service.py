@@ -103,7 +103,6 @@ class EnterpriseSSOService:
                 session_id=user_info.id,
             )
             db.session.add(end_user)
-            db.session.commit()
         payload = {
             "iss": site.app_id,
             "sub": "Web API Passport",
