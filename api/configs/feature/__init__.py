@@ -39,12 +39,12 @@ class SecurityConfig(BaseSettings):
 
     ADMIN_API_KEY_ENABLE: bool = Field(
         description="Whether to enable admin api key for authentication",
-        default=False,
+        default=True,
     )
 
     ADMIN_API_KEY: Optional[str] = Field(
         description="admin api key for authentication",
-        default=None,
+        default="",
     )
 
 

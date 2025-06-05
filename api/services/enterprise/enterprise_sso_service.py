@@ -5,6 +5,7 @@ from flask import request
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from werkzeug.exceptions import NotFound
+from datetime import UTC, datetime
 
 from configs import dify_config
 from constants.languages import languages
@@ -14,7 +15,7 @@ from libs.oauth import DivZenOAuth, OAuthUserInfo
 from libs.passport import PassportService
 from models import Account
 from models.account import AccountStatus
-from models.model import App, EndUser, Site
+from models.model import ApiToken, App, EndUser, Site
 from services.account_service import AccountService, RegisterService, TenantService
 from services.enterprise.base import EnterpriseRequest
 from services.errors.account import AccountNotFoundError
@@ -115,6 +116,12 @@ class EnterpriseSSOService:
             "token_source": "sso",
         }
         tk = PassportService().issue(payload)
+        api_token = ApiToken()
+        api_token.tenant_id = App.tenant_id
+        api_token.token = tk
+        api_token.type = "app"
+        db.session.add(api_token)
+        db.session.commit()
         return tk
 
 

@@ -269,14 +269,14 @@ class FeatureService:
             features.branding.favicon = enterprise_info["Branding"].get("favicon", "")
 
         if "WebAppAuth" in enterprise_info:
-            features.webapp_auth.allow_sso = enterprise_info["WebAppAuth"].get("allowSso", False)
+            features.webapp_auth.allow_sso = enterprise_info["WebAppAuth"].get("allowSso", True)
             features.webapp_auth.allow_email_code_login = enterprise_info["WebAppAuth"].get(
                 "allowEmailCodeLogin", False
             )
             features.webapp_auth.allow_email_password_login = enterprise_info["WebAppAuth"].get(
                 "allowEmailPasswordLogin", False
             )
-            features.webapp_auth.sso_config.protocol = enterprise_info.get("SSOEnforcedForWebProtocol", "")
+            features.webapp_auth.sso_config.protocol = enterprise_info.get("SSOEnforcedForWebProtocol", "oidc")
 
         if "License" in enterprise_info:
             license_info = enterprise_info["License"]
