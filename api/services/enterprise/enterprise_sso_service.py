@@ -116,7 +116,7 @@ class EnterpriseSSOService:
         }
         tk = PassportService().issue(payload)
         api_token = ApiToken()
-        api_token.tenant_id = App.tenant_id
+        api_token.tenant_id = app_model.tenant_id
         api_token.token = tk
         api_token.type = "app"
         db.session.add(api_token)
