@@ -2,7 +2,7 @@ import os
 from typing import Any, Literal, Optional
 from urllib.parse import quote_plus
 
-from pydantic import Field, NonNegativeInt, PositiveFloat, PositiveInt, computed_field
+from pydantic import Field, NonNegativeFloat, NonNegativeInt, PositiveFloat, PositiveInt, computed_field
 from pydantic_settings import BaseSettings
 
 from .cache.redis_config import RedisConfig
@@ -241,6 +241,25 @@ class InternalTestConfig(BaseSettings):
     )
 
 
+class DatasetQueueMonitorConfig(BaseSettings):
+    """
+    Configuration settings for Dataset Queue Monitor
+    """
+
+    QUEUE_MONITOR_THRESHOLD: Optional[NonNegativeInt] = Field(
+        description="Threshold for dataset queue monitor",
+        default=200,
+    )
+    QUEUE_MONITOR_ALERT_EMAILS: Optional[str] = Field(
+        description="Emails for dataset queue monitor alert, separated by commas",
+        default=None,
+    )
+    QUEUE_MONITOR_INTERVAL: Optional[NonNegativeFloat] = Field(
+        description="Interval for dataset queue monitor in minutes",
+        default=30,
+    )
+
+
 class MiddlewareConfig(
     # place the configs in alphabet order
     CeleryConfig,
@@ -287,5 +306,6 @@ class MiddlewareConfig(
     BaiduVectorDBConfig,
     OpenGaussConfig,
     TableStoreConfig,
+    DatasetQueueMonitorConfig,
 ):
     pass
