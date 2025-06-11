@@ -1,6 +1,6 @@
 import logging
-from typing import Optional
 from datetime import UTC, datetime, timedelta
+from typing import Optional
 
 from flask import request
 from sqlalchemy import select
