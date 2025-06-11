@@ -1,5 +1,6 @@
 import logging
 from typing import Optional
+from datetime import UTC, datetime, timedelta
 
 from flask import request
 from sqlalchemy import select
@@ -14,7 +15,7 @@ from libs.oauth import DivZenOAuth, OAuthUserInfo
 from libs.passport import PassportService
 from models import Account
 from models.account import AccountStatus
-from models.model import ApiToken, App, EndUser, Site
+from models.model import App, EndUser, Site
 from services.account_service import AccountService, RegisterService, TenantService
 from services.enterprise.base import EnterpriseRequest
 from services.errors.account import AccountNotFoundError
@@ -83,7 +84,7 @@ class EnterpriseSSOService:
         return token
 
     @classmethod
-    def login_with_email_at_web_app(cls, user_info: OAuthUserInfo, app_code: str) -> str:
+    def login_with_sso_at_web_app(cls, user_info: OAuthUserInfo, app_code: str) -> str:
         site = db.session.query(Site).filter(Site.code == app_code).first()
         if not site:
             raise NotFound()
@@ -103,24 +104,25 @@ class EnterpriseSSOService:
                 session_id=user_info.id,
             )
             db.session.add(end_user)
+            db.session.commit()
+        exp_dt = datetime.now(UTC) + timedelta(hours=dify_config.ACCESS_TOKEN_EXPIRE_MINUTES * 24)
+        exp = int(exp_dt.timestamp())
         payload = {
             "iss": site.app_id,
             "sub": "Web API Passport",
+            "user_id": user_info.id,
+            "session_id": user_info.email,
             "app_id": site.app_id,
             "app_code": app_code,
             "end_user_id": end_user.id,
             "external_user_id": user_info.id,
             "name": user_info.name,
-            "token_source": "sso",
+            "token_source": "webapp_login_token",
+            "exp": exp,
+            "auth_type": "internal",
         }
-        tk = PassportService().issue(payload)
-        api_token = ApiToken()
-        api_token.tenant_id = app_model.tenant_id
-        api_token.token = tk
-        api_token.type = "app"
-        db.session.add(api_token)
-        db.session.commit()
-        return tk
+        key: str = PassportService().issue(payload)
+        return key
 
 
 def _get_account_by_openid_or_email(provider: str, user_info: OAuthUserInfo) -> Optional[Account]:

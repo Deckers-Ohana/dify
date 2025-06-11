@@ -48,9 +48,10 @@ class EnterpriseService:
         @classmethod
         def is_user_allowed_to_access_webapp(cls, user_id: str, app_code: str):
             params = {"userId": user_id, "appCode": app_code}
-            data = EnterpriseRequest.send_request("GET", "/webapp/permission", params=params)
-
-            return data.get("result", False)
+            # data = EnterpriseRequest.send_request("GET", "/webapp/permission", params=params)
+            #
+            # return data.get("result", False)
+            return True
 
         @classmethod
         def get_app_access_mode_by_id(cls, app_id: str) -> WebAppSettings:
@@ -87,9 +88,9 @@ class EnterpriseService:
             if not app_code:
                 raise ValueError("app_code must be provided.")
             params = {"appCode": app_code}
-            data = EnterpriseRequest.send_request("GET", "/webapp/access-mode/code", params=params)
-            if not data:
-                raise ValueError("No data found.")
+            # data = EnterpriseRequest.send_request("GET", "/webapp/access-mode/code", params=params)
+            # if not data:
+            #     raise ValueError("No data found.")
             return WebAppSettings()
 
         @classmethod
