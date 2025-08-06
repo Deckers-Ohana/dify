@@ -107,8 +107,6 @@ const translation = {
     publishUpdate: 'Publicar Atualização',
     versionHistory: 'Histórico de Versão',
     exportImage: 'Exportar Imagem',
-    referenceVar: 'Variável de Referência',
-    noExist: 'Nenhuma variável desse tipo',
     exitVersions: 'Versões de Sair',
     exportSVG: 'Exportar como SVG',
     exportJPEG: 'Exportar como JPEG',
@@ -222,7 +220,6 @@ const translation = {
   tabs: {
     'tools': 'Ferramentas',
     'allTool': 'Todos',
-    'builtInTool': 'Integrado',
     'customTool': 'Personalizado',
     'workflowTool': 'Fluxo de trabalho',
     'question-understand': 'Compreensão de perguntas',
@@ -497,6 +494,7 @@ const translation = {
           placeholder: 'Insira o valor',
         },
         title: 'Filtragem de Metadados',
+        tip: 'A filtragem de metadados é o processo de usar atributos de metadados (como etiquetas, categorias ou permissões de acesso) para refinar e controlar a recuperação de informações relevantes dentro de um sistema.',
       },
     },
     http: {
@@ -586,7 +584,6 @@ const translation = {
         'not empty': 'não está vazio',
         'null': 'é nulo',
         'not null': 'não é nulo',
-        'regex match': 'partida regex',
         'in': 'em',
         'not in': 'não em',
         'exists': 'Existe',
@@ -609,7 +606,6 @@ const translation = {
       },
       addSubVariable: 'Subvariável',
       select: 'Selecionar',
-      condition: 'Condição',
     },
     variableAssigner: {
       title: 'Atribuir variáveis',
@@ -931,6 +927,7 @@ const translation = {
       restoreFailure: 'Falha ao restaurar versão',
       restoreSuccess: 'Versão restaurada',
       deleteFailure: 'Falha ao deletar versão',
+      copyIdSuccess: 'ID copiado para a área de transferência',
     },
     title: 'Versões',
     latest: 'Último',
@@ -941,6 +938,7 @@ const translation = {
     restorationTip: 'Após a restauração da versão, o rascunho atual será substituído.',
     currentDraft: 'Rascunho Atual',
     deletionTip: 'A exclusão é irreversível, por favor confirme.',
+    copyId: 'Copiar ID',
   },
   debug: {
     noData: {
@@ -970,6 +968,15 @@ const translation = {
     },
     settingsTab: 'Configurações',
     lastRunTab: 'Última execução',
+    relations: {
+      noDependents: 'Sem dependentes',
+      dependenciesDescription: 'Nós dos quais esse nó depende',
+      dependents: 'Dependentes',
+      dependencies: 'Dependências',
+      dependentsDescription: 'Nós que dependem desse nó',
+      noDependencies: 'Sem dependências',
+    },
+    relationsTab: 'Relações',
   },
 }
 

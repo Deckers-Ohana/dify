@@ -106,11 +106,9 @@ const translation = {
     exportImage: 'Exportă imaginea',
     exportSVG: 'Exportă ca SVG',
     exportPNG: 'Exportă ca PNG',
-    noExist: 'Nu există o astfel de variabilă',
     exitVersions: 'Ieșire Versiuni',
     versionHistory: 'Istoricul versiunilor',
     publishUpdate: 'Publicați actualizarea',
-    referenceVar: 'Variabilă de referință',
     exportJPEG: 'Exportă ca JPEG',
     addBlock: 'Adaugă nod',
     needAnswerNode: 'Nodul de răspuns trebuie adăugat',
@@ -222,7 +220,6 @@ const translation = {
   tabs: {
     'tools': 'Instrumente',
     'allTool': 'Toate',
-    'builtInTool': 'Integrat',
     'customTool': 'Personalizat',
     'workflowTool': 'Flux de lucru',
     'question-understand': 'Înțelegerea întrebărilor',
@@ -497,6 +494,7 @@ const translation = {
           search: 'Căutare metadate',
         },
         title: 'Filtrarea metadatelor',
+        tip: 'Filtrarea metadatelor este procesul de utilizare a atributelor metadatelor (cum ar fi etichetele, categoriile sau permisiunile de acces) pentru a rafina și controla recuperarea informațiilor relevante într-un sistem.',
       },
     },
     http: {
@@ -586,7 +584,6 @@ const translation = {
         'not empty': 'nu este gol',
         'null': 'este null',
         'not null': 'nu este null',
-        'regex match': 'potrivire regex',
         'in': 'în',
         'not in': 'nu în',
         'exists': 'Există',
@@ -609,7 +606,6 @@ const translation = {
       },
       select: 'Alege',
       addSubVariable: 'Subvariabilă',
-      condition: 'Condiție',
     },
     variableAssigner: {
       title: 'Atribuie variabile',
@@ -931,6 +927,7 @@ const translation = {
       deleteFailure: 'Ștergerea versiunii a eșuat',
       updateSuccess: 'Versiune actualizată',
       updateFailure: 'Actualizarea versiunii a eșuat',
+      copyIdSuccess: 'ID copiat în clipboard',
     },
     latest: 'Cea mai recentă',
     title: 'Versiuni',
@@ -941,6 +938,7 @@ const translation = {
     releaseNotesPlaceholder: 'Descrie ce s-a schimbat',
     deletionTip: 'Ștergerea este irreversibilă, vă rugăm să confirmați.',
     currentDraft: 'Draftul curent',
+    copyId: 'Copiază ID',
   },
   debug: {
     noData: {
@@ -970,6 +968,15 @@ const translation = {
     },
     settingsTab: 'Setări',
     lastRunTab: 'Ultima execuție',
+    relations: {
+      dependencies: 'Dependenţele',
+      noDependencies: 'Fără dependențe',
+      dependents: 'Dependenţe',
+      noDependents: 'Fără persoane aflate în întreținere',
+      dependentsDescription: 'Noduri care se bazează pe acest nod',
+      dependenciesDescription: 'Noduri pe care se bazează acest nod',
+    },
+    relationsTab: 'Relații',
   },
 }
 

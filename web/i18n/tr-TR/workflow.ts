@@ -109,9 +109,7 @@ const translation = {
     exitVersions: 'Çıkış Sürümleri',
     versionHistory: 'Sürüm Geçmişi',
     exportJPEG: 'JPEG olarak dışa aktar',
-    noExist: 'Böyle bir değişken yok',
     exportSVG: 'SVG olarak dışa aktar',
-    referenceVar: 'Referans Değişken',
     addBlock: 'Düğüm Ekle',
     needAnswerNode: 'Cevap düğümü eklenmelidir.',
     needEndNode: 'Son düğüm eklenmelidir',
@@ -222,7 +220,6 @@ const translation = {
   tabs: {
     'tools': 'Araçlar',
     'allTool': 'Hepsi',
-    'builtInTool': 'Yerleşik',
     'customTool': 'Özel',
     'workflowTool': 'Workflow',
     'question-understand': 'Soruyu Anlama',
@@ -497,6 +494,7 @@ const translation = {
           datePlaceholder: 'Bir zaman seçin...',
         },
         title: 'Meta Verileri Filtreleme',
+        tip: 'Metadata filtreleme, bir sistem içinde ilgili bilgilerin alınmasını ince ayar ve kontrol etmek için metadata özniteliklerini (etiketler, kategoriler veya erişim izinleri gibi) kullanma sürecidir.',
       },
     },
     http: {
@@ -587,7 +585,6 @@ const translation = {
         'not empty': 'boş değil',
         'null': 'null',
         'not null': 'null değil',
-        'regex match': 'normal ifade maçı',
         'in': 'içinde',
         'not exists': 'mevcut değil',
         'all of': 'Tümü',
@@ -610,7 +607,6 @@ const translation = {
       },
       addSubVariable: 'Alt Değişken',
       select: 'Seçmek',
-      condition: 'Koşul',
     },
     variableAssigner: {
       title: 'Değişken ata',
@@ -932,6 +928,7 @@ const translation = {
       updateFailure: 'Sürüm güncellenemedi',
       updateSuccess: 'Sürüm güncellendi',
       deleteSuccess: 'Sürüm silindi',
+      copyIdSuccess: 'Kimlik panoya kopyalandı',
     },
     latest: 'Sonuncu',
     currentDraft: 'Mevcut Taslak',
@@ -942,6 +939,7 @@ const translation = {
     releaseNotesPlaceholder: 'Değişen şeyleri tanımlayın',
     nameThisVersion: 'Bu versiyona isim ver',
     deletionTip: 'Silme işlemi geri alınamaz, lütfen onaylayın.',
+    copyId: 'ID Kopyala',
   },
   debug: {
     noData: {
@@ -971,6 +969,15 @@ const translation = {
     },
     lastRunTab: 'Son Koşu',
     settingsTab: 'Ayarlar',
+    relations: {
+      noDependents: 'Bakmakla yükümlü olunan kişi yok',
+      dependentsDescription: 'Bu düğüme dayanan düğümler',
+      dependenciesDescription: 'Bu düğümün dayandığı düğümler',
+      dependencies: 'Bağımlılık',
+      dependents: 'Bağımlı',
+      noDependencies: 'Bağımlılık yok',
+    },
+    relationsTab: 'Ilişkiler',
   },
 }
 

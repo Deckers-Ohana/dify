@@ -105,9 +105,7 @@ const translation = {
     noHistory: 'ไม่มีประวัติ',
     versionHistory: 'ประวัติรุ่น',
     exportPNG: 'ส่งออกเป็น PNG',
-    noExist: 'ไม่มีตัวแปรดังกล่าว',
     exportJPEG: 'ส่งออกเป็น JPEG',
-    referenceVar: 'ตัวแปรอ้างอิง',
     publishUpdate: 'เผยแพร่การอัปเดต',
     exitVersions: 'ออกเวอร์ชัน',
     exportImage: 'ส่งออกภาพ',
@@ -223,7 +221,6 @@ const translation = {
     'searchTool': 'เครื่องมือค้นหา',
     'tools': 'เครื่อง มือ',
     'allTool': 'ทั้งหมด',
-    'builtInTool': 'ในตัว',
     'customTool': 'ธรรมเนียม',
     'workflowTool': 'เวิร์กโฟลว์',
     'question-understand': 'คําถาม: เข้าใจ',
@@ -497,6 +494,7 @@ const translation = {
           placeholder: 'ใส่ค่า',
         },
         title: 'การกรองข้อมูลเมตา',
+        tip: 'การกรองข้อมูลเมตาดาต้าเป็นกระบวนการที่ใช้คุณลักษณะของเมตาดาต้า (เช่น แท็ก หมวดหมู่ หรือสิทธิการเข้าถึง) เพื่อปรับแต่งและควบคุมการดึงข้อมูลที่เกี่ยวข้องภายในระบบ.',
       },
     },
     http: {
@@ -608,7 +606,6 @@ const translation = {
       selectVariable: 'เลือกตัวแปร...',
       addSubVariable: 'ตัวแปรย่อย',
       select: 'เลือก',
-      condition: 'เงื่อนไข',
     },
     variableAssigner: {
       title: 'กําหนดตัวแปร',
@@ -930,6 +927,7 @@ const translation = {
       restoreSuccess: 'เวอร์ชันที่กู้คืน',
       restoreFailure: 'ไม่สามารถกู้คืนเวอร์ชันได้',
       updateSuccess: 'อัปเดตเวอร์ชัน',
+      copyIdSuccess: 'คัดลอกรหัสไปยังคลิปบอร์ด',
     },
     releaseNotesPlaceholder: 'อธิบายว่าสิ่งที่เปลี่ยนแปลงไปคืออะไร',
     currentDraft: 'ร่างปัจจุบัน',
@@ -940,6 +938,7 @@ const translation = {
     nameThisVersion: 'ชื่อเวอร์ชันนี้',
     title: 'เวอร์ชัน',
     latest: 'ล่าสุด',
+    copyId: 'คัดลอก ID',
   },
   debug: {
     noData: {
@@ -969,6 +968,15 @@ const translation = {
     },
     settingsTab: 'การตั้งค่า',
     lastRunTab: 'รอบสุดท้าย',
+    relations: {
+      dependents: 'ผู้อยู่ในอุปการะ',
+      dependencies: 'อ้าง อิง',
+      dependenciesDescription: 'โหนดที่โหนดนี้อาศัย',
+      noDependencies: 'ไม่มีการพึ่งพา',
+      noDependents: 'ไม่มีผู้อยู่ในอุปการะ',
+      dependentsDescription: 'โหนดที่อาศัยโหนดนี้',
+    },
+    relationsTab: 'สัมพันธ์',
   },
 }
 

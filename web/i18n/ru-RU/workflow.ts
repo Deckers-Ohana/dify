@@ -103,12 +103,10 @@ const translation = {
     addFailureBranch: 'Добавить ветвь Fail',
     noHistory: 'Без истории',
     loadMore: 'Загрузите больше рабочих процессов',
-    noExist: 'Такой переменной не существует',
     versionHistory: 'История версий',
     exportPNG: 'Экспортировать как PNG',
     exportImage: 'Экспортировать изображение',
     exportJPEG: 'Экспортировать как JPEG',
-    referenceVar: 'Ссылочная переменная',
     exitVersions: 'Выходные версии',
     exportSVG: 'Экспортировать как SVG',
     publishUpdate: 'Опубликовать обновление',
@@ -223,7 +221,6 @@ const translation = {
     'searchTool': 'Поиск инструмента',
     'tools': 'Инструменты',
     'allTool': 'Все',
-    'builtInTool': 'Встроенные',
     'customTool': 'Пользовательские',
     'workflowTool': 'Рабочий процесс',
     'question-understand': 'Понимание вопроса',
@@ -497,6 +494,7 @@ const translation = {
           search: 'Поиск метаданных',
         },
         title: 'Фильтрация метаданных',
+        tip: 'Фильтрация метаданных — это процесс использования атрибутов метаданных (таких как теги, категории или права доступа) для уточнения и контроля извлечения соответствующей информации внутри системы.',
       },
     },
     http: {
@@ -586,7 +584,6 @@ const translation = {
         'not empty': 'не пусто',
         'null': 'null',
         'not null': 'не null',
-        'regex match': 'Совпадение с регулярным выражением',
         'all of': 'все',
         'not in': 'не в',
         'not exists': 'не существует',
@@ -609,7 +606,6 @@ const translation = {
       },
       select: 'Выбирать',
       addSubVariable: 'Подпеременная',
-      condition: 'Условие',
     },
     variableAssigner: {
       title: 'Назначить переменные',
@@ -931,6 +927,7 @@ const translation = {
       deleteSuccess: 'Версия удалена',
       updateFailure: 'Не удалось обновить версию',
       restoreFailure: 'Не удалось восстановить версию',
+      copyIdSuccess: 'ID скопирован в буфер обмена',
     },
     latest: 'Последний',
     restorationTip: 'После восстановления версии текущий черновик будет перезаписан.',
@@ -941,6 +938,7 @@ const translation = {
     currentDraft: 'Текущий проект',
     releaseNotesPlaceholder: 'Опишите, что изменилось',
     defaultName: 'Без названия версия',
+    copyId: 'Копировать ID',
   },
   debug: {
     noData: {
@@ -970,6 +968,15 @@ const translation = {
     },
     lastRunTab: 'Последний запуск',
     settingsTab: 'Настройки',
+    relations: {
+      dependencies: 'Зависимости',
+      dependents: 'Иждивенцев',
+      noDependencies: 'Нет зависимостей',
+      dependentsDescription: 'Узлы, которые полагаются на этот узел',
+      noDependents: 'Отсутствие иждивенцев',
+      dependenciesDescription: 'Узлы, на которые опирается этот узел',
+    },
+    relationsTab: 'Отношения',
   },
 }
 
