@@ -114,6 +114,8 @@ const translation = {
     needEndNode: 'Należy dodać węzeł końcowy',
     needAnswerNode: 'Węzeł odpowiedzi musi zostać dodany',
     tagBound: 'Liczba aplikacji korzystających z tego tagu',
+    currentWorkflow: 'Bieżący przepływ pracy',
+    currentView: 'Bieżący widok',
   },
   env: {
     envPanelTitle: 'Zmienne Środowiskowe',
@@ -287,6 +289,18 @@ const translation = {
     zoomTo50: 'Powiększ do 50%',
     zoomTo100: 'Powiększ do 100%',
     zoomToFit: 'Dopasuj do ekranu',
+    alignMiddle: 'Środek',
+    alignTop: 'Do góry',
+    distributeHorizontal: 'Rozmieść poziomo',
+    alignCenter: 'Centrum',
+    alignRight: 'Prawy',
+    alignNodes: 'Wyrównywanie węzłów',
+    selectionAlignment: 'Wyrównanie zaznaczenia',
+    horizontal: 'Poziomy',
+    distributeVertical: 'Rozmieść pionowo',
+    alignBottom: 'Dół',
+    alignLeft: 'Lewy',
+    vertical: 'Pionowy',
   },
   panel: {
     userInputField: 'Pole wprowadzania użytkownika',
@@ -977,6 +991,10 @@ const translation = {
       noDependencies: 'Brak zależności',
     },
     relationsTab: 'Stosunków',
+    copyLastRun: 'Kopiuj ostatnie uruchomienie',
+    noLastRunFound: 'Nie znaleziono poprzedniego biegu.',
+    noMatchingInputsFound: 'Nie znaleziono pasujących danych wejściowych z ostatniego uruchomienia',
+    copyLastRunError: 'Nie udało się skopiować danych wejściowych z ostatniego uruchomienia',
   },
 }
 

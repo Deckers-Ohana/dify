@@ -114,6 +114,8 @@ const translation = {
     needAnswerNode: 'В узел ответа необходимо добавить',
     needEndNode: 'Узел конца должен быть добавлен',
     tagBound: 'Количество приложений, использующих этот тег',
+    currentView: 'Текущий вид',
+    currentWorkflow: 'Текущий рабочий процесс',
   },
   env: {
     envPanelTitle: 'Переменные среды',
@@ -287,6 +289,18 @@ const translation = {
     zoomTo50: 'Масштаб 50%',
     zoomTo100: 'Масштаб 100%',
     zoomToFit: 'По размеру',
+    alignTop: 'Вверх',
+    alignBottom: 'Вниз',
+    alignRight: 'Вправо',
+    distributeHorizontal: 'Распределить по горизонтали',
+    alignMiddle: 'По центру',
+    vertical: 'Вертикальный',
+    alignCenter: 'Центр',
+    alignLeft: 'Влево',
+    selectionAlignment: 'Выравнивание выделения',
+    horizontal: 'Горизонтальный',
+    alignNodes: 'Выравнивание узлов',
+    distributeVertical: 'Распределить по вертикали',
   },
   panel: {
     userInputField: 'Поле ввода пользователя',
@@ -977,6 +991,10 @@ const translation = {
       dependenciesDescription: 'Узлы, на которые опирается этот узел',
     },
     relationsTab: 'Отношения',
+    noLastRunFound: 'Предыдущий запуск не найден',
+    copyLastRun: 'Копировать последний запуск',
+    copyLastRunError: 'Не удалось скопировать последние входные данные выполнения',
+    noMatchingInputsFound: 'Не найдено соответствующих входных данных из последнего запуска.',
   },
 }
 

@@ -19,7 +19,7 @@ RUN apt-get -o Acquire::Check-Date=false update \
 
 # Install Python dependencies
 COPY pyproject.toml uv.lock ./
-RUN uv sync --locked
+RUN uv sync --locked --no-dev
 
 # production stage
 FROM base AS production

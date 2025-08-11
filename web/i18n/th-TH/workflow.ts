@@ -114,6 +114,8 @@ const translation = {
     addBlock: 'เพิ่มโนด',
     needEndNode: 'ต้องเพิ่มโหนดจบ',
     tagBound: 'จำนวนแอปพลิเคชันที่ใช้แท็กนี้',
+    currentWorkflow: 'เวิร์กโฟลว์ปัจจุบัน',
+    currentView: 'ปัจจุบัน View',
   },
   env: {
     envPanelTitle: 'ตัวแปรสภาพแวดล้อม',
@@ -287,6 +289,18 @@ const translation = {
     zoomTo50: 'ซูมไปที่ 50%',
     zoomTo100: 'ซูมไปที่ 100%',
     zoomToFit: 'ซูมให้พอดี',
+    alignBottom: 'ด้านล่าง',
+    alignCenter: 'ศูนย์กลาง',
+    alignMiddle: 'กลาง',
+    horizontal: 'แนวนอน',
+    vertical: 'แนวตั้ง',
+    alignTop: 'ด้านบน',
+    distributeVertical: 'ระยะห่างแนวตั้ง',
+    alignLeft: 'ซ้าย',
+    selectionAlignment: 'การจัดตําแหน่งการเลือก',
+    distributeHorizontal: 'ระยะห่างแนวนอน',
+    alignRight: 'ขวา',
+    alignNodes: 'จัดตําแหน่งโหนด',
   },
   panel: {
     userInputField: 'ฟิลด์ป้อนข้อมูลของผู้ใช้',
@@ -977,6 +991,10 @@ const translation = {
       dependentsDescription: 'โหนดที่อาศัยโหนดนี้',
     },
     relationsTab: 'สัมพันธ์',
+    copyLastRun: 'คัดลอกการทำงานล่าสุด',
+    noLastRunFound: 'ไม่พบการทำงานก่อนหน้า',
+    copyLastRunError: 'ไม่สามารถคัดลอกข้อมูลการทำงานครั้งสุดท้ายได้',
+    noMatchingInputsFound: 'ไม่พบข้อมูลที่ตรงกันจากการรันครั้งล่าสุด',
   },
 }
 
