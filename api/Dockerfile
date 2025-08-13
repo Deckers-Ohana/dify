@@ -4,7 +4,7 @@ FROM --platform=linux/amd64 harbor.turtle.deckers.com/docker.io/python:3.12-slim
 WORKDIR /app/api
 
 # Install uv
-ENV UV_VERSION=0.7.11
+ENV UV_VERSION=0.8.9
 
 RUN pip install --no-cache-dir uv==${UV_VERSION}
 

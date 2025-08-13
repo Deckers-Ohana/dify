@@ -18,6 +18,7 @@ import InstallFromMarketplace from '../plugins/install-plugin/install-from-marke
 import type { Plugin } from '../plugins/types'
 import { Command } from 'cmdk'
 import CommandSelector from './command-selector'
+import { RunCommandProvider } from './actions/run'
 
 type Props = {
   onHide?: () => void
@@ -33,7 +34,12 @@ const GotoAnything: FC<Props> = ({
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [cmdVal, setCmdVal] = useState<string>('')
   const inputRef = useRef<HTMLInputElement>(null)
-
+  const handleNavSearch = useCallback((q: string) => {
+    setShow(true)
+    setSearchQuery(q)
+    setCmdVal('')
+    requestAnimationFrame(() => inputRef.current?.focus())
+  }, [])
   // Filter actions based on context
   const Actions = useMemo(() => {
     // Create a filtered copy of actions based on current page context
@@ -43,8 +49,8 @@ const GotoAnything: FC<Props> = ({
     }
     else {
       // Exclude node action on non-workflow pages
-      const { app, knowledge, plugin } = AllActions
-      return { app, knowledge, plugin }
+      const { app, knowledge, plugin, run } = AllActions
+      return { app, knowledge, plugin, run }
     }
   }, [isWorkflowPage])
 
@@ -82,7 +88,7 @@ const GotoAnything: FC<Props> = ({
     wait: 300,
   })
 
-  const isCommandsMode = searchQuery.trim() === '@'
+  const isCommandsMode = searchQuery.trim() === '@' || (searchQuery.trim().startsWith('@') && !matchAction(searchQuery.trim(), Actions))
 
   const searchMode = useMemo(() => {
     if (isCommandsMode) return 'commands'
@@ -128,6 +134,11 @@ const GotoAnything: FC<Props> = ({
     setSearchQuery('')
 
     switch (result.type) {
+      case 'command': {
+        const action = Object.values(Actions).find(a => a.key === '@run')
+        action?.action?.(result)
+        break
+      }
       case 'plugin':
         setActivePlugin(result.data)
         break
@@ -238,12 +249,14 @@ const GotoAnything: FC<Props> = ({
         }}
         closable={false}
         className='!w-[480px] !p-0'
+        highPriority={true}
       >
         <div className='flex flex-col rounded-2xl border border-components-panel-border bg-components-panel-bg shadow-xl'>
           <Command
             className='outline-none'
             value={cmdVal}
             onValueChange={setCmdVal}
+            disablePointerSelection
           >
             <div className='flex items-center gap-3 border-b border-divider-subtle bg-components-panel-bg-blur px-4 py-3'>
               <RiSearchLine className='h-4 w-4 text-text-quaternary' />
@@ -253,8 +266,9 @@ const GotoAnything: FC<Props> = ({
                   value={searchQuery}
                   placeholder={t('app.gotoAnything.searchPlaceholder')}
                   onChange={(e) => {
-                    setCmdVal('')
                     setSearchQuery(e.target.value)
+                    if (!e.target.value.startsWith('@'))
+                      setCmdVal('')
                   }}
                   className='flex-1 !border-0 !bg-transparent !shadow-none'
                   wrapperClassName='flex-1 !border-0 !bg-transparent'
@@ -301,6 +315,9 @@ const GotoAnything: FC<Props> = ({
                     <CommandSelector
                       actions={Actions}
                       onCommandSelect={handleCommandSelect}
+                      searchFilter={searchQuery.trim().substring(1)}
+                      commandValue={cmdVal}
+                      onCommandValueChange={setCmdVal}
                     />
                   ) : (
                     Object.entries(groupedResults).map(([type, results], groupIndex) => (
@@ -317,7 +334,7 @@ const GotoAnything: FC<Props> = ({
                         <Command.Item
                           key={`${result.type}-${result.id}`}
                           value={result.title}
-                          className='flex cursor-pointer items-center gap-3 rounded-md p-3 will-change-[background-color] aria-[selected=true]:bg-state-base-hover data-[selected=true]:bg-state-base-hover'
+                          className='flex cursor-pointer items-center gap-3 rounded-md p-3 will-change-[background-color] hover:bg-state-base-hover aria-[selected=true]:bg-state-base-hover-alt data-[selected=true]:bg-state-base-hover-alt'
                           onSelect={() => handleNavigate(result)}
                         >
                           {result.icon}
@@ -375,6 +392,7 @@ const GotoAnything: FC<Props> = ({
         </div>
 
       </Modal>
+      <RunCommandProvider onNavSearch={handleNavSearch} />
       {
         activePlugin && (
           <InstallFromMarketplace
