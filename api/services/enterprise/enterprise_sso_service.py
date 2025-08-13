@@ -119,7 +119,7 @@ class EnterpriseSSOService:
             "name": user_info.name,
             "token_source": "webapp_login_token",
             "exp": exp,
-            "auth_type": "internal",
+            "auth_type": "external",
         }
         key: str = PassportService().issue(payload)
         return key
