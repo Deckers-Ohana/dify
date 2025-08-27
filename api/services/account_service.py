@@ -67,6 +67,8 @@ from tasks.mail_owner_transfer_task import (
 )
 from tasks.mail_reset_password_task import send_reset_password_mail_task
 
+logger = logging.getLogger(__name__)
+
 
 class TokenPair(BaseModel):
     access_token: str
@@ -349,9 +351,9 @@ class AccountService:
                 db.session.add(account_integrate)
 
             db.session.commit()
-            logging.info("Account %s linked %s account %s.", account.id, provider, open_id)
+            logger.info("Account %s linked %s account %s.", account.id, provider, open_id)
         except Exception as e:
-            logging.exception("Failed to link %s account %s to Account %s", provider, open_id, account.id)
+            logger.exception("Failed to link %s account %s to Account %s", provider, open_id, account.id)
             raise LinkAccountIntegrateError("Failed to link account.") from e
 
     @staticmethod
@@ -442,7 +444,7 @@ class AccountService:
         cls,
         account: Optional[Account] = None,
         email: Optional[str] = None,
-        language: Optional[str] = "en-US",
+        language: str = "en-US",
     ):
         account_email = account.email if account else email
         if account_email is None:
@@ -469,12 +471,14 @@ class AccountService:
         account: Optional[Account] = None,
         email: Optional[str] = None,
         old_email: Optional[str] = None,
-        language: Optional[str] = "en-US",
+        language: str = "en-US",
         phase: Optional[str] = None,
     ):
         account_email = account.email if account else email
         if account_email is None:
             raise ValueError("Email must be provided.")
+        if not phase:
+            raise ValueError("phase must be provided.")
 
         if cls.change_email_rate_limiter.is_rate_limited(account_email):
             from controllers.console.auth.error import EmailChangeRateLimitExceededError
@@ -497,7 +501,7 @@ class AccountService:
         cls,
         account: Optional[Account] = None,
         email: Optional[str] = None,
-        language: Optional[str] = "en-US",
+        language: str = "en-US",
     ):
         account_email = account.email if account else email
         if account_email is None:
@@ -513,7 +517,7 @@ class AccountService:
         cls,
         account: Optional[Account] = None,
         email: Optional[str] = None,
-        language: Optional[str] = "en-US",
+        language: str = "en-US",
         workspace_name: Optional[str] = "",
     ):
         account_email = account.email if account else email
@@ -526,6 +530,7 @@ class AccountService:
             raise OwnerTransferRateLimitExceededError()
 
         code, token = cls.generate_owner_transfer_token(account_email, account)
+        workspace_name = workspace_name or ""
 
         send_owner_transfer_confirm_task.delay(
             language=language,
@@ -541,13 +546,14 @@ class AccountService:
         cls,
         account: Optional[Account] = None,
         email: Optional[str] = None,
-        language: Optional[str] = "en-US",
+        language: str = "en-US",
         workspace_name: Optional[str] = "",
-        new_owner_email: Optional[str] = "",
+        new_owner_email: str = "",
     ):
         account_email = account.email if account else email
         if account_email is None:
             raise ValueError("Email must be provided.")
+        workspace_name = workspace_name or ""
 
         send_old_owner_transfer_notify_email_task.delay(
             language=language,
@@ -561,12 +567,13 @@ class AccountService:
         cls,
         account: Optional[Account] = None,
         email: Optional[str] = None,
-        language: Optional[str] = "en-US",
+        language: str = "en-US",
         workspace_name: Optional[str] = "",
     ):
         account_email = account.email if account else email
         if account_email is None:
             raise ValueError("Email must be provided.")
+        workspace_name = workspace_name or ""
 
         send_new_owner_transfer_notify_email_task.delay(
             language=language,
@@ -650,7 +657,10 @@ class AccountService:
 
     @classmethod
     def send_email_code_login_email(
-        cls, account: Optional[Account] = None, email: Optional[str] = None, language: Optional[str] = "en-US"
+        cls,
+        account: Optional[Account] = None,
+        email: Optional[str] = None,
+        language: str = "en-US",
     ):
         email = account.email if account else email
         if email is None:
@@ -934,7 +944,7 @@ class TenantService:
         """Create tenant member"""
         if role == TenantAccountRole.OWNER.value:
             if TenantService.has_roles(tenant, [TenantAccountRole.OWNER]):
-                logging.error("Tenant %s has already an owner.", tenant.id)
+                logger.error("Tenant %s has already an owner.", tenant.id)
                 raise Exception("Tenant already has an owner.")
 
         ta = db.session.query(TenantAccountJoin).filter_by(tenant_id=tenant.id, account_id=account.id).first()
@@ -1186,7 +1196,7 @@ class RegisterService:
             db.session.query(Tenant).delete()
             db.session.commit()
 
-            logging.exception("Setup account failed, email: %s, name: %s", email, name)
+            logger.exception("Setup account failed, email: %s, name: %s", email, name)
             raise ValueError(f"Setup failed: {e}")
 
     @classmethod
@@ -1231,15 +1241,15 @@ class RegisterService:
             db.session.commit()
         except WorkSpaceNotAllowedCreateError:
             db.session.rollback()
-            logging.exception("Register failed")
+            logger.exception("Register failed")
             raise AccountRegisterError("Workspace is not allowed to create.")
         except AccountRegisterError as are:
             db.session.rollback()
-            logging.exception("Register failed")
+            logger.exception("Register failed")
             raise are
         except Exception as e:
             db.session.rollback()
-            logging.exception("Register failed")
+            logger.exception("Register failed")
             raise AccountRegisterError(f"Registration failed: {e}") from e
 
         return account
@@ -1277,10 +1287,11 @@ class RegisterService:
                 raise AccountAlreadyInTenantError("Account already in tenant.")
 
         token = cls.generate_invite_token(tenant, account)
+        language = account.interface_language or "en-US"
 
         # send email
         send_invite_member_mail_task.delay(
-            language=account.interface_language,
+            language=language,
             to=email,
             token=token,
             inviter_name=inviter.name if inviter else "Dify",

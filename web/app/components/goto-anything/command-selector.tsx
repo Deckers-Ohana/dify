@@ -20,7 +20,6 @@ const CommandSelector: FC<Props> = ({ actions, onCommandSelect, searchFilter, co
       return true
     const filterLower = searchFilter.toLowerCase()
     return action.shortcut.toLowerCase().includes(filterLower)
-      || action.key.toLowerCase().includes(filterLower)
   })
 
   useEffect(() => {
@@ -70,10 +69,10 @@ const CommandSelector: FC<Props> = ({ actions, onCommandSelect, searchFilter, co
             <span className="ml-3 text-sm text-text-secondary">
               {(() => {
                 const keyMap: Record<string, string> = {
+                  '/': 'app.gotoAnything.actions.slashDesc',
                   '@app': 'app.gotoAnything.actions.searchApplicationsDesc',
                   '@plugin': 'app.gotoAnything.actions.searchPluginsDesc',
                   '@knowledge': 'app.gotoAnything.actions.searchKnowledgeBasesDesc',
-                  '@run': 'app.gotoAnything.actions.runDesc',
                   '@node': 'app.gotoAnything.actions.searchWorkflowNodesDesc',
                 }
                 return t(keyMap[action.key])
