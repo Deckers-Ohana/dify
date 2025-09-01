@@ -3,7 +3,7 @@ import secrets
 import urllib.parse
 
 from flask import current_app, make_response, redirect
-from flask_restful import Resource, reqparse
+from flask_restx import Resource, reqparse
 
 from configs import dify_config
 from controllers.web import api
