@@ -139,7 +139,7 @@ class DivZenOAuth(OAuth):
     _TOKEN_URL = "https://divzen.uat.turtle.deckers.com/oauth2/token"
     _USER_INFO_URL = "https://divzen.uat.turtle.deckers.com/oauth2/userinfo"
 
-    def get_authorization_url(self, invite_token: Optional[str] = None):
+    def get_authorization_url(self, invite_token: str | None = None):
         params = {
             "client_id": self.client_id,
             "response_type": "code",
