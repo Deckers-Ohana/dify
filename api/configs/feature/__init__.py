@@ -689,12 +689,12 @@ class AuthConfig(BaseSettings):
         default=None,
     )
 
-    DIVZEN_CLIENT_ID: Optional[str] = Field(
+    DIVZEN_CLIENT_ID: str | None  = Field(
         description="divZen OAuth client ID",
         default=None,
     )
 
-    DIVZEN_CLIENT_SECRET: Optional[str] = Field(
+    DIVZEN_CLIENT_SECRET: str | None  = Field(
         description="divZen OAuth client secret",
         default=None,
     )
@@ -781,7 +781,7 @@ class MailConfig(BaseSettings):
 
     MAIL_TEMPLATING_TIMEOUT: int = Field(
         description="""
-        Timeout for email templating in seconds. Used to prevent infinite loops in malicious templates. 
+        Timeout for email templating in seconds. Used to prevent infinite loops in malicious templates.
         Only available in sandbox mode.""",
         default=3,
     )
