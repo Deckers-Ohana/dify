@@ -1,9 +1,9 @@
 import urllib.parse
 from dataclasses import dataclass
-from typing import Optional
 
 import jwt
 import requests
+import httpx
 
 
 @dataclass
@@ -43,7 +43,7 @@ class GitHubOAuth(OAuth):
     _USER_INFO_URL = "https://api.github.com/user"
     _EMAIL_INFO_URL = "https://api.github.com/user/emails"
 
-    def get_authorization_url(self, invite_token: Optional[str] = None):
+    def get_authorization_url(self, invite_token: str | None = None):
         params = {
             "client_id": self.client_id,
             "redirect_uri": self.redirect_uri,
@@ -61,7 +61,7 @@ class GitHubOAuth(OAuth):
             "redirect_uri": self.redirect_uri,
         }
         headers = {"Accept": "application/json"}
-        response = requests.post(self._TOKEN_URL, data=data, headers=headers)
+        response = httpx.post(self._TOKEN_URL, data=data, headers=headers)
 
         response_json = response.json()
         access_token = response_json.get("access_token")
@@ -73,11 +73,11 @@ class GitHubOAuth(OAuth):
 
     def get_raw_user_info(self, token: str):
         headers = {"Authorization": f"token {token}"}
-        response = requests.get(self._USER_INFO_URL, headers=headers)
+        response = httpx.get(self._USER_INFO_URL, headers=headers)
         response.raise_for_status()
         user_info = response.json()
 
-        email_response = requests.get(self._EMAIL_INFO_URL, headers=headers)
+        email_response = httpx.get(self._EMAIL_INFO_URL, headers=headers)
         email_info = email_response.json()
         primary_email: dict = next((email for email in email_info if email["primary"] == True), {})
 
@@ -91,11 +91,11 @@ class GitHubOAuth(OAuth):
 
 
 class GoogleOAuth(OAuth):
-    _AUTH_URL = "https://divzen.uat.turtle.deckers.com/oauth2/authorize"
-    _TOKEN_URL = "https://divzen.uat.turtle.deckers.com/oauth2/token"
-    _USER_INFO_URL = "https://divzen.uat.turtle.deckers.com/oauth2/userinfo"
+    _AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
+    _TOKEN_URL = "https://oauth2.googleapis.com/token"
+    _USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
 
-    def get_authorization_url(self, invite_token: Optional[str] = None):
+    def get_authorization_url(self, invite_token: str | None = None):
         params = {
             "client_id": self.client_id,
             "response_type": "code",
@@ -115,7 +115,7 @@ class GoogleOAuth(OAuth):
             "redirect_uri": self.redirect_uri,
         }
         headers = {"Accept": "application/json"}
-        response = requests.post(self._TOKEN_URL, data=data, headers=headers)
+        response = httpx.post(self._TOKEN_URL, data=data, headers=headers)
 
         response_json = response.json()
         access_token = response_json.get("access_token")
@@ -126,22 +126,13 @@ class GoogleOAuth(OAuth):
         return access_token
 
     def get_raw_user_info(self, token: str):
-        # headers = {'Authorization': f"Bearer {token}"}
-        # response = requests.get(self._USER_INFO_URL, headers=headers)
-        # response.raise_for_status()
-        # return response.json()
-        payload = jwt.decode(token, verify=False, options={"verify_signature": False})
-        print(payload)
-        name = payload["sub"]
-        if name.find("@"):
-            email = payload["sub"]
-        else:
-            email = name + "@deckers.com"
-        return {"sub": name, "email": email, "id": payload["id"]}
+        headers = {"Authorization": f"Bearer {token}"}
+        response = httpx.get(self._USER_INFO_URL, headers=headers)
+        response.raise_for_status()
+        return response.json()
 
     def _transform_user_info(self, raw_info: dict) -> OAuthUserInfo:
-        return OAuthUserInfo(id=str(raw_info["id"]), name=str(raw_info["sub"]), email=raw_info["email"])
-
+        return OAuthUserInfo(id=str(raw_info["sub"]), name="", email=raw_info["email"])
 
 class DivZenOAuth(OAuth):
     _AUTH_URL = "https://divzen.uat.turtle.deckers.com/oauth2/authorize"
@@ -180,7 +171,7 @@ class DivZenOAuth(OAuth):
 
     def get_raw_user_info(self, token: str):
         # headers = {'Authorization': f"Bearer {token}"}
-        # response = requests.get(self._USER_INFO_URL, headers=headers)
+        # response = httpx.get(self._USER_INFO_URL, headers=headers)
         # response.raise_for_status()
         # return response.json()
         payload = jwt.decode(token, verify=False, options={"verify_signature": False})
