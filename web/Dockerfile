@@ -21,6 +21,7 @@ FROM base AS packages
 WORKDIR /app/web
 
 COPY package.json pnpm-lock.yaml /app/web/
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
 # Use packageManager from package.json
 RUN corepack install
@@ -36,6 +37,7 @@ WORKDIR /app/web
 COPY --from=packages /app/web/ .
 COPY . .
 
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN pnpm build:docker
 
@@ -53,6 +55,7 @@ ENV MARKETPLACE_URL=https://marketplace.dify.ai
 ENV PORT=3000
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PM2_INSTANCES=2
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
 # set timezone
 ENV TZ=UTC
