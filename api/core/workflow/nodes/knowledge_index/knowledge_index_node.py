@@ -2,20 +2,19 @@ import datetime
 import logging
 import time
 from collections.abc import Mapping
-from typing import Any, cast
+from typing import Any
 
 from sqlalchemy import func, select
 
 from core.app.entities.app_invoke_entities import InvokeFrom
 from core.rag.index_processor.index_processor_factory import IndexProcessorFactory
 from core.rag.retrieval.retrieval_methods import RetrievalMethod
-from core.workflow.entities.variable_pool import VariablePool
 from core.workflow.entities.workflow_node_execution import WorkflowNodeExecutionStatus
-from core.workflow.enums import ErrorStrategy, NodeExecutionType, NodeType, SystemVariableKey
+from core.workflow.enums import NodeExecutionType, NodeType, SystemVariableKey
 from core.workflow.node_events import NodeRunResult
-from core.workflow.nodes.base.entities import BaseNodeData, RetryConfig
 from core.workflow.nodes.base.node import Node
 from core.workflow.nodes.base.template import Template
+from core.workflow.runtime import VariablePool
 from extensions.ext_database import db
 from models.dataset import Dataset, Document, DocumentSegment
 
@@ -27,7 +26,7 @@ from .exc import (
 logger = logging.getLogger(__name__)
 
 default_retrieval_model = {
-    "search_method": RetrievalMethod.SEMANTIC_SEARCH.value,
+    "search_method": RetrievalMethod.SEMANTIC_SEARCH,
     "reranking_enable": False,
     "reranking_model": {"reranking_provider_name": "", "reranking_model_name": ""},
     "top_k": 2,
@@ -35,34 +34,12 @@ default_retrieval_model = {
 }
 
 
-class KnowledgeIndexNode(Node):
-    _node_data: KnowledgeIndexNodeData
+class KnowledgeIndexNode(Node[KnowledgeIndexNodeData]):
     node_type = NodeType.KNOWLEDGE_INDEX
     execution_type = NodeExecutionType.RESPONSE
 
-    def init_node_data(self, data: Mapping[str, Any]) -> None:
-        self._node_data = KnowledgeIndexNodeData.model_validate(data)
-
-    def _get_error_strategy(self) -> ErrorStrategy | None:
-        return self._node_data.error_strategy
-
-    def _get_retry_config(self) -> RetryConfig:
-        return self._node_data.retry_config
-
-    def _get_title(self) -> str:
-        return self._node_data.title
-
-    def _get_description(self) -> str | None:
-        return self._node_data.desc
-
-    def _get_default_value_dict(self) -> dict[str, Any]:
-        return self._node_data.default_value_dict
-
-    def get_base_node_data(self) -> BaseNodeData:
-        return self._node_data
-
     def _run(self) -> NodeRunResult:  # type: ignore
-        node_data = cast(KnowledgeIndexNodeData, self._node_data)
+        node_data = self.node_data
         variable_pool = self.graph_runtime_state.variable_pool
         dataset_id = variable_pool.get(["sys", SystemVariableKey.DATASET_ID])
         if not dataset_id:
@@ -77,7 +54,7 @@ class KnowledgeIndexNode(Node):
             raise KnowledgeIndexNodeError("Index chunk variable is required.")
         invoke_from = variable_pool.get(["sys", SystemVariableKey.INVOKE_FROM])
         if invoke_from:
-            is_preview = invoke_from.value == InvokeFrom.DEBUGGER.value
+            is_preview = invoke_from.value == InvokeFrom.DEBUGGER
         else:
             is_preview = False
         chunks = variable.value

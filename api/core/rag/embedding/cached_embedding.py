@@ -1,5 +1,6 @@
 import base64
 import logging
+import pickle
 from typing import Any, cast
 
 import numpy as np
@@ -43,8 +44,7 @@ class CacheEmbedding(Embeddings):
             else:
                 embedding_queue_indices.append(i)
 
-        # release database connection, because embedding may take a long time
-        db.session.close()
+        # NOTE: avoid closing the shared scoped session here; downstream code may still have pending work
 
         if embedding_queue_indices:
             embedding_queue_texts = [texts[i] for i in embedding_queue_indices]
@@ -90,8 +90,8 @@ class CacheEmbedding(Embeddings):
                                 model_name=self._model_instance.model,
                                 hash=hash,
                                 provider_name=self._model_instance.provider,
+                                embedding=pickle.dumps(n_embedding, protocol=pickle.HIGHEST_PROTOCOL),
                             )
-                            embedding_cache.set_embedding(n_embedding)
                             db.session.add(embedding_cache)
                             cache_embeddings.append(hash)
                     db.session.commit()

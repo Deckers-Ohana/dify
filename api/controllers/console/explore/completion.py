@@ -15,7 +15,6 @@ from controllers.console.app.error import (
 from controllers.console.explore.error import NotChatAppError, NotCompletionAppError
 from controllers.console.explore.wraps import InstalledAppResource
 from controllers.web.error import InvokeRateLimitError as InvokeRateLimitHttpError
-from core.app.apps.base_app_queue_manager import AppQueueManager
 from core.app.entities.app_invoke_entities import InvokeFrom
 from core.errors.error import (
     ModelCurrentlyNotSupportError,
@@ -31,6 +30,7 @@ from libs.login import current_user
 from models import Account
 from models.model import AppMode
 from services.app_generate_service import AppGenerateService
+from services.app_task_service import AppTaskService
 from services.errors.llm import InvokeRateLimitError
 
 from .. import console_ns
@@ -46,15 +46,17 @@ logger = logging.getLogger(__name__)
 class CompletionApi(InstalledAppResource):
     def post(self, installed_app):
         app_model = installed_app.app
-        if app_model.mode != "completion":
+        if app_model.mode != AppMode.COMPLETION:
             raise NotCompletionAppError()
 
-        parser = reqparse.RequestParser()
-        parser.add_argument("inputs", type=dict, required=True, location="json")
-        parser.add_argument("query", type=str, location="json", default="")
-        parser.add_argument("files", type=list, required=False, location="json")
-        parser.add_argument("response_mode", type=str, choices=["blocking", "streaming"], location="json")
-        parser.add_argument("retriever_from", type=str, required=False, default="explore_app", location="json")
+        parser = (
+            reqparse.RequestParser()
+            .add_argument("inputs", type=dict, required=True, location="json")
+            .add_argument("query", type=str, location="json", default="")
+            .add_argument("files", type=list, required=False, location="json")
+            .add_argument("response_mode", type=str, choices=["blocking", "streaming"], location="json")
+            .add_argument("retriever_from", type=str, required=False, default="explore_app", location="json")
+        )
         args = parser.parse_args()
 
         streaming = args["response_mode"] == "streaming"
@@ -100,12 +102,18 @@ class CompletionApi(InstalledAppResource):
 class CompletionStopApi(InstalledAppResource):
     def post(self, installed_app, task_id):
         app_model = installed_app.app
-        if app_model.mode != "completion":
+        if app_model.mode != AppMode.COMPLETION:
             raise NotCompletionAppError()
 
         if not isinstance(current_user, Account):
             raise ValueError("current_user must be an Account instance")
-        AppQueueManager.set_stop_flag(task_id, InvokeFrom.EXPLORE, current_user.id)
+
+        AppTaskService.stop_task(
+            task_id=task_id,
+            invoke_from=InvokeFrom.EXPLORE,
+            user_id=current_user.id,
+            app_mode=AppMode.value_of(app_model.mode),
+        )
 
         return {"result": "success"}, 200
 
@@ -121,13 +129,15 @@ class ChatApi(InstalledAppResource):
         if app_mode not in {AppMode.CHAT, AppMode.AGENT_CHAT, AppMode.ADVANCED_CHAT}:
             raise NotChatAppError()
 
-        parser = reqparse.RequestParser()
-        parser.add_argument("inputs", type=dict, required=True, location="json")
-        parser.add_argument("query", type=str, required=True, location="json")
-        parser.add_argument("files", type=list, required=False, location="json")
-        parser.add_argument("conversation_id", type=uuid_value, location="json")
-        parser.add_argument("parent_message_id", type=uuid_value, required=False, location="json")
-        parser.add_argument("retriever_from", type=str, required=False, default="explore_app", location="json")
+        parser = (
+            reqparse.RequestParser()
+            .add_argument("inputs", type=dict, required=True, location="json")
+            .add_argument("query", type=str, required=True, location="json")
+            .add_argument("files", type=list, required=False, location="json")
+            .add_argument("conversation_id", type=uuid_value, location="json")
+            .add_argument("parent_message_id", type=uuid_value, required=False, location="json")
+            .add_argument("retriever_from", type=str, required=False, default="explore_app", location="json")
+        )
         args = parser.parse_args()
 
         args["auto_generate_name"] = False
@@ -180,6 +190,12 @@ class ChatStopApi(InstalledAppResource):
 
         if not isinstance(current_user, Account):
             raise ValueError("current_user must be an Account instance")
-        AppQueueManager.set_stop_flag(task_id, InvokeFrom.EXPLORE, current_user.id)
+
+        AppTaskService.stop_task(
+            task_id=task_id,
+            invoke_from=InvokeFrom.EXPLORE,
+            user_id=current_user.id,
+            app_mode=app_mode,
+        )
 
         return {"result": "success"}, 200

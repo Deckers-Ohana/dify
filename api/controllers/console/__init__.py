@@ -66,6 +66,7 @@ from .app import (
     workflow_draft_variable,
     workflow_run,
     workflow_statistic,
+    workflow_trigger,
 )
 
 # Import auth controllers
@@ -128,6 +129,7 @@ from .workspace import (
     models,
     plugin,
     tool_providers,
+    trigger_providers,
     workspace,
 )
 
@@ -198,6 +200,7 @@ __all__ = [
     "statistic",
     "tags",
     "tool_providers",
+    "trigger_providers",
     "version",
     "website",
     "workflow",
@@ -205,5 +208,6 @@ __all__ = [
     "workflow_draft_variable",
     "workflow_run",
     "workflow_statistic",
+    "workflow_trigger",
     "workspace",
 ]

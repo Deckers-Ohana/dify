@@ -79,6 +79,7 @@ class ModelProviderService:
                 label=provider_configuration.provider.label,
                 description=provider_configuration.provider.description,
                 icon_small=provider_configuration.provider.icon_small,
+                icon_small_dark=provider_configuration.provider.icon_small_dark,
                 icon_large=provider_configuration.provider.icon_large,
                 background=provider_configuration.provider.background,
                 help=provider_configuration.provider.help,
@@ -137,7 +138,7 @@ class ModelProviderService:
         :return:
         """
         provider_configuration = self._get_provider_configuration(tenant_id, provider)
-        return provider_configuration.get_provider_credential(credential_id=credential_id)  # type: ignore
+        return provider_configuration.get_provider_credential(credential_id=credential_id)
 
     def validate_provider_credentials(self, tenant_id: str, provider: str, credentials: dict):
         """
@@ -225,7 +226,7 @@ class ModelProviderService:
         :return:
         """
         provider_configuration = self._get_provider_configuration(tenant_id, provider)
-        return provider_configuration.get_custom_model_credential(  # type: ignore
+        return provider_configuration.get_custom_model_credential(
             model_type=ModelType.value_of(model_type), model=model, credential_id=credential_id
         )
 
@@ -402,6 +403,7 @@ class ModelProviderService:
                     provider=provider,
                     label=first_model.provider.label,
                     icon_small=first_model.provider.icon_small,
+                    icon_small_dark=first_model.provider.icon_small_dark,
                     icon_large=first_model.provider.icon_large,
                     status=CustomConfigurationStatus.ACTIVE,
                     models=[

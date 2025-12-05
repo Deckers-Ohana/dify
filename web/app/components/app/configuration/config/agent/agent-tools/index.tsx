@@ -4,7 +4,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useContext } from 'use-context-selector'
 import copy from 'copy-to-clipboard'
-import produce from 'immer'
+import { produce } from 'immer'
 import {
   RiDeleteBinLine,
   RiEqualizer2Line,
@@ -251,6 +251,7 @@ const AgentTools: FC = () => {
                     {!item.notAuthor && (
                       <Tooltip
                         popupContent={t('tools.setBuiltInTools.infoAndSetting')}
+                        needsDelay={false}
                       >
                         <div className='cursor-pointer rounded-md p-1  hover:bg-black/5' onClick={() => {
                           setCurrentTool(item)

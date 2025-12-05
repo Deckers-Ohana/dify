@@ -85,6 +85,9 @@ const DatasetCard = ({
   }, [t, dataset.document_count, dataset.total_available_documents])
 
   const { formatTimeFromNow } = useFormatTimeFromNow()
+  const editTimeText = useMemo(() => {
+    return `${t('datasetDocuments.segment.editedAt')} ${formatTimeFromNow(dataset.updated_at * 1000)}`
+  }, [t, dataset.updated_at, formatTimeFromNow])
 
   const openRenameModal = useCallback(() => {
     setShowRenameModal(true)
@@ -157,12 +160,12 @@ const DatasetCard = ({
         data-disable-nprogress={true}
         onClick={(e) => {
           e.preventDefault()
-          isExternalProvider
-            ? push(`/datasets/${dataset.id}/hitTesting`)
-            // eslint-disable-next-line sonarjs/no-nested-conditional
-            : isPipelineUnpublished
-              ? push(`/datasets/${dataset.id}/pipeline`)
-              : push(`/datasets/${dataset.id}/documents`)
+          if (isExternalProvider)
+            push(`/datasets/${dataset.id}/hitTesting`)
+          else if (isPipelineUnpublished)
+            push(`/datasets/${dataset.id}/pipeline`)
+          else
+            push(`/datasets/${dataset.id}/documents`)
         }}
       >
         {!dataset.embedding_available && (
@@ -192,6 +195,11 @@ const DatasetCard = ({
               title={dataset.name}
             >
               {dataset.name}
+            </div>
+            <div className='flex items-center gap-1 text-[10px] font-medium leading-[18px] text-text-tertiary'>
+              <div className='truncate' title={dataset.author_name}>{dataset.author_name}</div>
+              <div>·</div>
+              <div className='truncate' title={editTimeText}>{editTimeText}</div>
             </div>
             <div className='system-2xs-medium-uppercase flex items-center gap-x-3 text-text-tertiary'>
               {isExternalProvider && <span>{t('dataset.externalKnowledgeBase')}</span>}

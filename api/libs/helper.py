@@ -10,12 +10,13 @@ import uuid
 from collections.abc import Generator, Mapping
 from datetime import datetime
 from hashlib import sha256
-from typing import TYPE_CHECKING, Any, Optional, Union, cast
+from typing import TYPE_CHECKING, Annotated, Any, Optional, Union, cast
 from zoneinfo import available_timezones
 
 from flask import Response, stream_with_context
 from flask_restx import fields
 from pydantic import BaseModel
+from pydantic.functional_validators import AfterValidator
 
 from configs import dify_config
 from core.app.features.rate_limiting.rate_limit import RateLimitGenerator
@@ -24,7 +25,7 @@ from core.model_runtime.utils.encoders import jsonable_encoder
 from extensions.ext_redis import redis_client
 
 if TYPE_CHECKING:
-    from models.account import Account
+    from models import Account
     from models.model import EndUser
 
 logger = logging.getLogger(__name__)
@@ -43,7 +44,7 @@ def extract_tenant_id(user: Union["Account", "EndUser"]) -> str | None:
     Raises:
         ValueError: If user is neither Account nor EndUser
     """
-    from models.account import Account
+    from models import Account
     from models.model import EndUser
 
     if isinstance(user, Account):
@@ -78,9 +79,11 @@ class AvatarUrlField(fields.Raw):
         if obj is None:
             return None
 
-        from models.account import Account
+        from models import Account
 
         if isinstance(obj, Account) and obj.avatar is not None:
+            if obj.avatar.startswith(("http://", "https://")):
+                return obj.avatar
             return file_helpers.get_signed_file_url(obj.avatar)
         return None
 
@@ -99,6 +102,9 @@ def email(email):
 
     error = f"{email} is not a valid email."
     raise ValueError(error)
+
+
+EmailStr = Annotated[str, AfterValidator(email)]
 
 
 def uuid_value(value):
@@ -173,6 +179,15 @@ def timezone(timezone_string):
 
     error = f"{timezone_string} is not a valid timezone."
     raise ValueError(error)
+
+
+def convert_datetime_to_date(field, target_timezone: str = ":tz"):
+    if dify_config.DB_TYPE == "postgresql":
+        return f"DATE(DATE_TRUNC('day', {field} AT TIME ZONE 'UTC' AT TIME ZONE {target_timezone}))"
+    elif dify_config.DB_TYPE == "mysql":
+        return f"DATE(CONVERT_TZ({field}, 'UTC', {target_timezone}))"
+    else:
+        raise NotImplementedError(f"Unsupported database type: {dify_config.DB_TYPE}")
 
 
 def generate_string(n):
