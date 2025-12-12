@@ -1,8 +1,17 @@
 import secrets
 
-from flask import current_app, make_response, redirect
+from flask import current_app, make_response, redirect, request
 from flask_restx import Resource, reqparse
-
+from libs.token import (
+    clear_access_token_from_cookie,
+    clear_csrf_token_from_cookie,
+    clear_refresh_token_from_cookie,
+    extract_refresh_token,
+    set_access_token_to_cookie,
+    set_csrf_token_to_cookie,
+    set_refresh_token_to_cookie,
+)
+from services.account_service import AccountService, RegisterService, TenantService
 from controllers.console import api
 from controllers.console.wraps import setup_required
 from services.enterprise.enterprise_sso_service import EnterpriseSSOService
@@ -61,8 +70,13 @@ class EnterpriseSSOOidcCallback(Resource):
         args = parser.parse_args()
         try:
             token = EnterpriseSSOService.get_sso_oidc_callback(args)
+            response = make_response()
+            set_access_token_to_cookie(request, response, token.access_token)
+            set_refresh_token_to_cookie(request, response, token.refresh_token)
+            set_csrf_token_to_cookie(request, response, token.csrf_token)
             return redirect(
-                f"{current_app.config.get('CONSOLE_WEB_URL')}/signin?access_token={token.get('access_token')}&refresh_token={token.get('refresh_token')}"
+                # f"{current_app.config.get('CONSOLE_WEB_URL')}/signin?access_token={token.get('access_token')}&refresh_token={token.get('refresh_token')}"
+                f"{current_app.config.get('CONSOLE_WEB_URL')}/apps"
             )
         except Exception as e:
             return redirect(f"{current_app.config.get('CONSOLE_WEB_URL')}/signin?message={str(e)}")

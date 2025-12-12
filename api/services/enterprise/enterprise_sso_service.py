@@ -1,6 +1,7 @@
 import logging
 from datetime import UTC, datetime, timedelta
 from typing import Optional
+import secrets
 
 from flask import request
 from sqlalchemy import select
@@ -16,6 +17,10 @@ from libs.passport import PassportService
 from models import Account
 from models.account import AccountStatus
 from models.model import App, EndUser, Site
+from libs.token import (
+    generate_csrf_token
+)
+from pydantic import BaseModel
 from services.account_service import AccountService, RegisterService, TenantService
 from services.enterprise.base import EnterpriseRequest
 from services.errors.account import AccountNotFoundError
@@ -24,6 +29,10 @@ from services.feature_service import FeatureService
 
 logger = logging.getLogger(__name__)
 
+class TokenPair(BaseModel):
+    access_token: str
+    refresh_token: str
+    csrf_token: str
 
 class EnterpriseSSOService:
     @classmethod
@@ -68,7 +77,7 @@ class EnterpriseSSOService:
         if response is None or response.email is None:
             logger.exception(response)
             raise Exception("OIDC response is invalid")
-        return {"access_token": cls.login_with_email(response), "refresh_token": token.get("refresh_token")}
+        return cls.login_with_email(response)
 
     @classmethod
     def login_with_email(cls, user_info: OAuthUserInfo) -> str:
@@ -80,8 +89,12 @@ class EnterpriseSSOService:
         tenants = TenantService.get_join_tenants(account)
         if len(tenants) == 0:
             raise Exception("workspace not found, please contact system admin to invite you to join in a workspace")
-        token = AccountService.get_account_jwt_token(account)
-        return token
+        access_token = AccountService.get_account_jwt_token(account=account)
+        refresh_token = _generate_refresh_token()
+        csrf_token = generate_csrf_token(account.id)
+
+        AccountService._store_refresh_token(refresh_token, account.id)
+        return TokenPair(access_token=access_token, refresh_token=refresh_token, csrf_token=csrf_token)
 
     @classmethod
     def login_with_sso_at_web_app(cls, user_info: OAuthUserInfo, app_code: str) -> str:
@@ -124,7 +137,9 @@ class EnterpriseSSOService:
         key: str = PassportService().issue(payload)
         return key
 
-
+def _generate_refresh_token(length: int = 64):
+    token = secrets.token_hex(length)
+    return token
 def _get_account_by_openid_or_email(provider: str, user_info: OAuthUserInfo) -> Optional[Account]:
     account: Optional[Account] = Account.get_by_openid(provider, user_info.id)
 
