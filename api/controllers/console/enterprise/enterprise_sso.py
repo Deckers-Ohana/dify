@@ -70,14 +70,14 @@ class EnterpriseSSOOidcCallback(Resource):
         args = parser.parse_args()
         try:
             token = EnterpriseSSOService.get_sso_oidc_callback(args)
-            response = make_response()
-            set_access_token_to_cookie(request, response, token.access_token)
-            set_refresh_token_to_cookie(request, response, token.refresh_token)
-            set_csrf_token_to_cookie(request, response, token.csrf_token)
-            return redirect(
+            response = redirect(
                 # f"{current_app.config.get('CONSOLE_WEB_URL')}/signin?access_token={token.get('access_token')}&refresh_token={token.get('refresh_token')}"
                 f"{current_app.config.get('CONSOLE_WEB_URL')}/apps"
             )
+            set_access_token_to_cookie(request, response, token.access_token)
+            set_refresh_token_to_cookie(request, response, token.refresh_token)
+            set_csrf_token_to_cookie(request, response, token.csrf_token)
+            return response
         except Exception as e:
             return redirect(f"{current_app.config.get('CONSOLE_WEB_URL')}/signin?message={str(e)}")
 
